@@ -10,7 +10,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<?> urlValidationFilter() {
         FilterRegistrationBean<UrlFilter> urlValidationFilter = new FilterRegistrationBean(new UrlFilter());
-        urlValidationFilter.addUrlPatterns("/*");
+        urlValidationFilter.addUrlPatterns("/api/*");
         return urlValidationFilter;
     }
 

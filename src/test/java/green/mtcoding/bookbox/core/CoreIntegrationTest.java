@@ -66,7 +66,7 @@ public class CoreIntegrationTest {
     public void checkUrlFilter_Test() throws Exception {
         //given
         int id = 1;
-        User user = User.builder().name("hapssar").build();
+        User user = User.builder().username("hapssar").build();
         em.persist(user);
         em.flush();
 
