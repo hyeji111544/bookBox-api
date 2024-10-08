@@ -5,6 +5,7 @@ import green.mtcoding.bookbox.lend.Lend;
 import green.mtcoding.bookbox.reservation.Reservation;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Table(name = "user_tb")
 public class User {
@@ -41,5 +43,19 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations = new ArrayList<>();
+
+
+
+    @Builder
+    public User(Long id, String username, String password, String phone, String email, Timestamp createdAt, Timestamp modifiedAt, String profile) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.profile = profile;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+    }
 
 }

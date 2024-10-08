@@ -33,7 +33,7 @@ public class UserIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        User user = User.builder().name("ksh").build();
+        User user = User.builder().username("ksh").build();
         em.persist(user);
         em.flush();
         em.clear();
@@ -44,7 +44,7 @@ public class UserIntegrationTest {
     @Test
     public void saveUser_Test() throws Exception {
         //given
-        User user = User.builder().name("ssar").build();
+        User user = User.builder().username("ssar").build();
 
         String usersJson = objectMapper.writeValueAsString(user);
 
@@ -66,7 +66,7 @@ public class UserIntegrationTest {
     @Test
     public void findUser_Test() throws Exception {
         //given
-        int id = 1;
+        Long id = 1L;
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.get("/users/{id}",id)
@@ -85,8 +85,8 @@ public class UserIntegrationTest {
     @Test
     public void chageUser_Test() throws Exception {
         //given
-        int id = 1;
-        User user = User.builder().id(id).name("hapssar").build();
+        Long id = 1L;
+        User user = User.builder().id(id).username("hapssar").build();
 
         String userJson = objectMapper.writeValueAsString(user);
 

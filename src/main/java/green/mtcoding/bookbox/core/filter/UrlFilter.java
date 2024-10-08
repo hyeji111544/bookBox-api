@@ -22,7 +22,10 @@ public class UrlFilter implements Filter {
         String queryString = request.getQueryString();
         String fullURL = requestURL.toString() + (queryString == null ? "" : "?" + queryString );
 
-        if(INVALID_URL_PATTERN.matcher(fullURL).find()) {
+
+        String h2Url = "http://localhost:8080/h2-console";
+
+        if(INVALID_URL_PATTERN.matcher(fullURL).find() && !INVALID_URL_PATTERN.matcher(h2Url).find()) {
             noticeWrongUrl(response);
             return;
         }

@@ -1,6 +1,4 @@
 package green.mtcoding.bookbox.book;
-
-
 import green.mtcoding.bookbox.comment.Comment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
