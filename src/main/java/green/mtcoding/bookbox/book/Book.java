@@ -38,7 +38,4 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<Comment> comments = new ArrayList<>();
 
-
-
-
 }
