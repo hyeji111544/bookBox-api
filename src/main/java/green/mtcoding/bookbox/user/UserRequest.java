@@ -4,6 +4,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -12,6 +15,9 @@ import java.sql.Timestamp;
 public class UserRequest {
 
     @Data
+    @Setter
+    @Getter
+    @NoArgsConstructor
     public static class JoinDTO {
         @NotEmpty
         private String username;
@@ -22,10 +28,8 @@ public class UserRequest {
         private String email;
         @NotEmpty
         private String phone;
-        @CreationTimestamp
-        private Timestamp createdAt;
 
-        public User toEntity() {return User.builder().username(username).password(password).email(email).build();}
+        public User toEntity() {return User.builder().username(username).password(password).email(email).phone(phone).build();}
 
     }
 
