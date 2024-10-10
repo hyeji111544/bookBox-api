@@ -26,6 +26,14 @@ public class BookResponse {
     }
 
     @Data
+    public static class BookListDTO {
+        private String isbn13;
+        private String title;
+        private String author;
+        private String cover;
+    }
+
+    @Data
     public static class BookSearchDTO {
         private String isbn13;
         private String title;
