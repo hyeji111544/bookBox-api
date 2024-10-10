@@ -1,11 +1,9 @@
 package green.mtcoding.bookbox.core.exception;
 
 
-import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
-import green.mtcoding.bookbox.core.exception.api.ExceptionApi403;
-import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
-import green.mtcoding.bookbox.core.exception.api.ExceptionApi500;
+import green.mtcoding.bookbox.core.exception.api.*;
 import green.mtcoding.bookbox.core.util.Msg;
+import green.mtcoding.bookbox.core.util.Resp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,6 +19,12 @@ public class GlobalApiExceptionHandler {
     @ExceptionHandler(ExceptionApi400.class)
     public ResponseEntity<?> ex400(Exception e) {
         return new ResponseEntity<>(Msg.fail(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    // 인증 실패 (클라이언트가 인증없이 요청했거나, 인증을 하거나 실패했거나)
+    @ExceptionHandler(ExceptionApi401.class)
+    public ResponseEntity<?> ex401(Exception e) {
+        return new ResponseEntity<>(Resp.fail(401, e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ExceptionApi403.class)
