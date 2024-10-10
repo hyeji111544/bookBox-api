@@ -6,35 +6,42 @@ import lombok.Data;
 import javax.swing.text.View;
 
 public class UserResponse {
-
+    // 회원가입
     @Data
-    public static class JoinResponse {
+    public static class JoinDTO {
         private Long id;
         private String username;
         private String email;
+        private String phone;
+        private String profile;
 
-        @Builder
-        public JoinResponse(Long id, String username, String email) {
-            this.id = id;
-            this.username = username;
-            this.email = email;
+        public JoinDTO(User user) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.email = user.getEmail();
+            this.phone = user.getPhone();
+            this.profile = user.getProfile();
         }
     }
 
+    // 로그인
     @Data
-    public static class LoginResponse {
+    public static class LoginDTO {
         private Long id;
         private String username;
+        private String accessToken;
 
         @Builder
-        public LoginResponse(Long id, String username) {
-            this.id = id;
-            this.username = username;
+        public LoginDTO(User user, String accessToken) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.accessToken = accessToken;
         }
     }
 
+    // 조회
     @Data
-    public static class CheckResponse {
+    public static class CheckResponse { // 조회
         private Long id;
         private String username;
         private String email;
