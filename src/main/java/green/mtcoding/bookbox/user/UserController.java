@@ -3,10 +3,6 @@ package green.mtcoding.bookbox.user;
 
 import green.mtcoding.bookbox.core.global.CommonResponse;
 import green.mtcoding.bookbox.core.util.Resp;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-@Tag(name = "User", description = "User API")
 @RestController
 @RequiredArgsConstructor
 public class UserController {

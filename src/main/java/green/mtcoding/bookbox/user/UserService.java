@@ -44,7 +44,7 @@ public class UserService {
                 .orElseThrow(() -> new ExceptionApi401("인증되지 않았습니다"));
 
         // 2. 조회가 되면, JWT 만들고 응답하기
-        String accessToken = JwtUtil.create(user);
+        String accessToken = JwtUtil.createUserToken(user);
 
         return new UserResponse.LoginDTO(user, accessToken);
     }

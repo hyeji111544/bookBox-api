@@ -5,6 +5,9 @@ VALUES
     ('love', '1234', '010-9876-5432', 'love@example.com', NULL, '2024-10-08 14:00:00', '2024-10-08 15:00:00');
 
 
+INSERT INTO admin_tb (username, password, phone, email, admin_role)
+VALUES
+    ('admin01', '1234', '010-9999-9999', 'admin01@example.com', 'ADMIN');
 
 
 

@@ -42,14 +42,15 @@ public class User {
     private String profile;
 
     @OneToMany(mappedBy = "user")
-    private List<Lend> lends;
+    private List<Lend> lends = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
+
 
 
     @Builder
-    public User(Long id, String username, String password, String phone, String email, Timestamp createdAt, String profile) {
+    public User(Long id, String username, String password, String phone, String email, Timestamp createdAt, Timestamp modifiedAt, String profile) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -57,6 +58,7 @@ public class User {
         this.email = email;
         this.profile = profile;
         this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
     }
 
 }
