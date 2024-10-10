@@ -44,4 +44,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
     Optional<Book> findByIsbn13(String isbn13);
 
 
+
+    @Query("SELECT b FROM Book b WHERE b.title LIKE %:title% OR b.author LIKE %:author% OR b.publisher LIKE %:publisher% order by b.isbn13 desc")
+    List<Book> mFindAll(@Param("title") String title, @Param("author") String author, @Param("publisher") String publisher);
 }

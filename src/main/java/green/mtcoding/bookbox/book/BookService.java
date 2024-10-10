@@ -43,6 +43,18 @@ public class BookService {
         return dtos;
     }
 
+
+
+    public List<BookResponse.CategoryDTO> 책과카테고리보기(){
+        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
+        List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
+        for(Category category : categories) {
+            BookResponse.CategoryDTO dto = new BookResponse.CategoryDTO(category);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
 //    public List<BookResponse.BookListDTO> 메인책목록보기(){
 //        List<Book> books = bookRepository.mFindAllWithCategory();
 //        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
