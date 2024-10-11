@@ -2,6 +2,7 @@ package green.mtcoding.bookbox.admin;
 
 import green.mtcoding.bookbox.book.BookRequest;
 import green.mtcoding.bookbox.book.BookResponse;
+import green.mtcoding.bookbox.book.BookService;
 import green.mtcoding.bookbox.core.util.Resp;
 import green.mtcoding.bookbox.user.UserRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class AdminController {
+
     private final AdminService adminService;
+    private final BookService bookService;
 
     // =========================== AUTH ====================================
     // 로그인
@@ -43,10 +46,31 @@ public class AdminController {
 
 
     // =========================== BOOK ====================================
-
     // 도서 등록
     @PostMapping("/api/admins/book-save")
-    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest) {
-        BookResponse bookResponse
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest.SaveDTO saveDTO) {
+        BookResponse.BookDetailDTO savedBook = bookService.도서등록(saveDTO);
+        return ResponseEntity.ok(Resp.ok(savedBook));
+    }
+
+    // 도서 수정
+    @PutMapping("/api/admins/{isbn13}")
+    public ResponseEntity<?> updateBook(@PathVariable String isbn13, @RequestBody BookRequest.UpdateDTO updateDTO) {
+        BookResponse.BookDetailDTO updateBook = bookService.도서업데이트(isbn13, updateDTO);
+        return ResponseEntity.ok(Resp.ok(updateBook));
+    }
+
+    // 도서 삭제
+    @DeleteMapping("/api/admins/{isbn13}/delete")
+    public ResponseEntity<?> deleteBook(@PathVariable String isbn13) {
+        bookService.deleteBook(isbn13);
+        return ResponseEntity.ok(Resp.ok("도서가 성공적으로 삭제되었습니다."));
+    }
+
+    // 도서 상세보기 (등록 도서 조회)
+    @GetMapping("/api/admins/{isbn13}")
+    public ResponseEntity<?> getBookDetails(@PathVariable String isbn13) {
+        BookResponse.BookDetailDTO bookDetail = bookService.도서상세보기(isbn13);
+        return ResponseEntity.ok(Resp.ok(bookDetail));
     }
 }

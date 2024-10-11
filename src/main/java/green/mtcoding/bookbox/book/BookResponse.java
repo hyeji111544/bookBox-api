@@ -73,4 +73,76 @@ public class BookResponse {
             this.cover = book.getCover();
         }
     }
+
+
+    // TODO: ===================== 도서 CRUD - 신민재 ===========================
+
+    @Data
+    public static class SaveDTO {
+        private String isbn13;
+        private String title;
+        private String author;
+        private String publisher;
+        private String description;
+        private String cover;
+        private String pubDate;
+        private String categoryId;
+
+        public SaveDTO(Book book ) {
+            this.isbn13 = book.getIsbn13();
+            this.title = book.getTitle();
+            this.author = book.getAuthor();
+            this.publisher = book.getPublisher();
+            this.description = book.getDescription();
+            this.cover = book.getCover();
+            this.pubDate = book.getPubDate();
+        }
+    }
+
+    @Data
+    public static class UpdateDTO {
+        private String title;
+        private String author;
+        private String publisher;
+        private String description;
+        private String cover;
+        private String pubDate;
+        private String categoryId;
+
+        public UpdateDTO(Book book) {
+            this.title = book.getTitle();
+            this.author = book.getAuthor();
+            this.publisher = book.getPublisher();
+            this.description = book.getDescription();
+            this.cover = book.getCover();
+            this.pubDate = book.getPubDate();
+            this.categoryId = book.getCategory().getId();
+        }
+    }
+
+
+    @Data
+    public static class BookDetailDTO {
+        private String isbn13;
+        private String title;
+        private String author;
+        private String publisher;
+        private String description;
+        private String cover;
+        private String pubDate;
+        private boolean lendStatus;
+
+        public BookDetailDTO(Book book ) {
+            this.isbn13 = book.getIsbn13();
+            this.title = book.getTitle();
+            this.author = book.getAuthor();
+            this.publisher = book.getPublisher();
+            this.description = book.getDescription();
+            this.cover = book.getCover();
+            this.pubDate = book.getPubDate();
+            this.lendStatus = book.isLendStatus();
+        }
+    }
+
+
 }
