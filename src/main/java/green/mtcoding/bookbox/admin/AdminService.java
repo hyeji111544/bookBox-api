@@ -1,6 +1,5 @@
 package green.mtcoding.bookbox.admin;
 
-
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.util.JwtUtil;
 import green.mtcoding.bookbox.user.User;
@@ -20,8 +19,8 @@ public class AdminService {
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
 
-    public AdminResponse.LoginResponse login(AdminRequest.LoginDTO request) {
-        // 로그인 로직
+    // 로그인 로직
+    public AdminResponse.LoginDTO 로그인(AdminRequest.LoginDTO request) {
         Admin admin = adminRepository.findByUsernameAndPassword(request.getUsername(), request.getPassword())
                 .orElseThrow(() -> new ExceptionApi400("아이디 또는 비밀번호가 틀렸습니다."));
 
@@ -29,13 +28,15 @@ public class AdminService {
         String token = JwtUtil.createAdminToken(admin);
 
         // 로그인 응답 반환
-        return AdminResponse.LoginResponse.builder()
+        return AdminResponse.LoginDTO.builder()
                 .id(admin.getId())
                 .username(admin.getUsername())
                 .token(token)
                 .build();
     }
 
+
+    // 관리자 정보 조회
     public AdminResponse.AdminInfo getAdminInfo(Long id) {
         Admin admin = adminRepository.findById(id)
                 .orElseThrow(() -> new ExceptionApi400("관리자를 찾을 수 없습니다."));
@@ -57,7 +58,4 @@ public class AdminService {
                 .map(UserRequest.UserDTO::new)
                 .collect(Collectors.toList());
     }
-
-
-    // TODO: 추가적인 crud 기능도 여기 포함 (회원 관리, 도서 관리 등)
 }

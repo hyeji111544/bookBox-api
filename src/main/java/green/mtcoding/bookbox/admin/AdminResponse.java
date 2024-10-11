@@ -5,6 +5,7 @@ import lombok.Data;
 
 public class AdminResponse {
 
+    // 관리자 정보 반환
     @Data
     @Builder
     public static class AdminInfo {
@@ -15,11 +16,13 @@ public class AdminResponse {
         private String role;
     }
 
+    // 로그인 응답
     @Data
     @Builder
-    public static class LoginResponse {
+    public static class LoginDTO {
         private Long id;
         private String username;
         private String token; // JWT 토큰
     }
+
 }

@@ -11,7 +11,7 @@ public class AdminRequest {
     }
 
     @Data
-    public static class AdminDTO {
+    public static class AdminInfo {
         private String username;
         private String email;
         private String phone;
