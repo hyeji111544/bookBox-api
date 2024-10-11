@@ -5,10 +5,13 @@ import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.util.JwtUtil;
 import green.mtcoding.bookbox.user.User;
 import green.mtcoding.bookbox.user.UserRepository;
+import green.mtcoding.bookbox.user.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +50,12 @@ public class AdminService {
     }
 
     // 전체 유저 목록 조회
-    public List<User> getUserList() {
-        return userRepository.findAll();
+    @Transactional
+    public List<UserRequest.UserDTO> getUserList() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserRequest.UserDTO::new)
+                .collect(Collectors.toList());
     }
 
 
