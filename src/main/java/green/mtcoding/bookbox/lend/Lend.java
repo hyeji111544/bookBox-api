@@ -21,8 +21,8 @@ public class Lend {
     private Long id;
 
     @CreationTimestamp
-    private Timestamp rendDate;
-    @CreationTimestamp
+    private Timestamp lendDate;
+    @Column(nullable = true)
     private Timestamp returnDate;
 
     private boolean returnStatus;
@@ -32,6 +32,14 @@ public class Lend {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", referencedColumnName = "isbn13") // referencing the String id
     private Book book;
+
+    @PrePersist
+    public void prePersist() {
+        this.returnStatus = false;
+        this.extendStatus = false;
+    }
+
 
 }

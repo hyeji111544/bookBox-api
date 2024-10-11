@@ -1,7 +1,6 @@
 package green.mtcoding.bookbox.user;
 
 
-import green.mtcoding.bookbox.core.global.CommonResponse;
 import green.mtcoding.bookbox.core.util.Resp;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +23,13 @@ public class UserController {
         String accessToken = result.getAccessToken();
 
         return ResponseEntity.ok()
-                .header("Authorization", "Bearer "+ accessToken)
-                .body(Resp.ok(result));
+                .header("Authorization", "Bearer " + accessToken)
+                .body(Resp.ok(result, "성공적으로 로그인되었습니다."));
     }
 
     // 회원가입
     @PostMapping("/join")
-    public ResponseEntity<?> join(@Valid @ModelAttribute UserRequest.JoinDTO joinDTO, Errors errors, @RequestParam("profile") MultipartFile profile){
+    public ResponseEntity<?> join(@Valid @ModelAttribute UserRequest.JoinDTO joinDTO, Errors errors, @RequestParam("profile") MultipartFile profile) {
 
 /*
         , @RequestHeader("Authorization") String accessToken
@@ -43,7 +42,14 @@ public class UserController {
         User user = JwtUtil.verify(accessToken);
         //String username = claims.getSubject(); // JWT에서 유저명 추출*/
 
-        UserResponse.JoinDTO model = userService.회원가입(profile, joinDTO);
-        return ResponseEntity.ok(Resp.ok(model));
+        UserResponse.JoinDTO result = userService.회원가입(profile, joinDTO);
+        return ResponseEntity.ok(Resp.ok(result, "회원가입이 완료되었습니다."));
+    }
+
+    @DeleteMapping("/api/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+
+
+        return ResponseEntity.ok(Resp.ok("회원가입이 완료되었습니다."));
     }
 }
