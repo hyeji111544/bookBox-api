@@ -1,5 +1,7 @@
 package green.mtcoding.bookbox.admin;
 
+import green.mtcoding.bookbox.book.BookRequest;
+import green.mtcoding.bookbox.book.BookResponse;
 import green.mtcoding.bookbox.core.util.Resp;
 import green.mtcoding.bookbox.user.UserRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import java.util.List;
 public class AdminController {
     private final AdminService adminService;
 
+    // =========================== AUTH ====================================
     // 로그인
     @PostMapping("/api/admins/login")
     public ResponseEntity<?> login(@RequestBody AdminRequest.LoginDTO loginDTO) {
@@ -36,5 +39,14 @@ public class AdminController {
     public ResponseEntity<?> getUserList() {
         List<UserRequest.UserDTO> users = adminService.getUserList();
         return ResponseEntity.ok(Resp.ok(users));
+    }
+
+
+    // =========================== BOOK ====================================
+
+    // 도서 등록
+    @PostMapping("/api/admins/book-save")
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest) {
+        BookResponse bookResponse
     }
 }
