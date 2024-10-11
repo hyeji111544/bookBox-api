@@ -3,6 +3,7 @@ package green.mtcoding.bookbox.admin;
 
 import green.mtcoding.bookbox.core.global.CommonResponse;
 import green.mtcoding.bookbox.user.User;
+import green.mtcoding.bookbox.user.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class AdminController {
     }
 
     @GetMapping("/api/admins/user-list")
-    public ResponseEntity<CommonResponse<List<User>>> getUserList() {
-        List<User> users = adminService.getUserList();
+    public ResponseEntity<CommonResponse<List<UserRequest.UserDTO>>> getUserList() {
+        List<UserRequest.UserDTO> users = adminService.getUserList();
         return new ResponseEntity<>(CommonResponse.success(users), HttpStatus.OK);
     }
 
