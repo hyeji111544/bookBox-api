@@ -2,6 +2,7 @@ package green.mtcoding.bookbox.user;
 
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi401;
+import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.util.JwtUtil;
 import green.mtcoding.bookbox.core.util.MyFile;
 import lombok.RequiredArgsConstructor;
@@ -49,32 +50,23 @@ public class UserService {
         return new UserResponse.LoginDTO(user, accessToken);
     }
 
-/*    public UserResponse.CheckResponse getUser(Long id) {
-        // ID로 사용자 조회
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("사용자 없음"));
 
-        // UserReadResponse 반환
-        return UserResponse.CheckResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .build();
-    }
 
-    public void updateUser(Long id, UserRequest.JoinDTO request) {
-        // ID로 사용자 조회 후 정보 수정
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("사용자 없음"));
-        user.setPassword(request.getPassword());
-        user.setEmail(request.getEmail());
-        user.setPhone(request.getPhone());
 
-        // 업데이트 된 사용자 저장
-        userRepository.save(user);
-    }
 
-    public void deleteUser(Long id) {
+
+/*    public User 회원탈퇴(Long id) {
+        // 조회
+        Optional<User> userOP = userRepository.findById(id);
+        // 없으면 예외던지기
+        if(userOP.isEmpty() || userOP.get().getId() == null) {
+            throw new ExceptionApi404("유저를 찾을 수 없습니다.");
+        }
+
         // ID로 사용자 삭제
         userRepository.deleteById(id);
+        // 삭제한 유저 정보 반환
+        User user = userOP.get();
+        return user;
     }*/
 }

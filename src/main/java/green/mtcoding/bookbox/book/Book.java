@@ -15,6 +15,7 @@ import java.util.List;
 public class Book {
 
     @Id
+    @Column(name = "isbn13")
     private String isbn13;
 
     private String title;
