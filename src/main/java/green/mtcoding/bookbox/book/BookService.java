@@ -123,7 +123,6 @@ public class BookService {
         return new BookResponse.BookDetailDTO(book);
     }
 
-
     public List<BookResponse.clickCategoryDTO> 카테고리별책보기(String id){
         List<Book> bookList = bookRepository.mFindByCategoryId(id);
         List<BookResponse.clickCategoryDTO> dtos = new ArrayList<>();
