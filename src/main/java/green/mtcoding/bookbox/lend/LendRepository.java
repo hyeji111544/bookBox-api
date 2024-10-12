@@ -19,10 +19,10 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     @Query("select l.extendStatus from Lend l where l.user.id = :userId AND l.book.isbn13 = :isbn13 AND l.returnStatus = FALSE")
     Optional<Boolean> mCheckExtendStatus(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 
-    // 대여중인 도서 연장 (lendDate +7 & extendStatus = true)
+    // 대여중인 도서 연장 (returnDate +7 & extendStatus = true)
     //@Query("update Lend l SET l.extendStatus = true, l.lendDate = FUNCTION('TIMESTAMPADD', 'DAY', 7, l.lendDate) where l.user.id = :userId AND l.book.isbn13 = :isbn13")
     @Modifying
-    @Query(value = "UPDATE lend_tb SET extend_status = true, lend_date = DATEADD('DAY', 7, lend_date) WHERE user_id = :userId AND book_id = :isbn13", nativeQuery = true)
+    @Query(value = "UPDATE lend_tb SET extend_status = true, return_date = DATEADD('DAY', 7, return_date) WHERE user_id = :userId AND book_id = :isbn13", nativeQuery = true)
     void mExtendLend(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 
     // 해당 user와 book의 lend 데이터 조회
@@ -35,5 +35,11 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     Integer mReturnLend(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 
 
+
+/*
+    // 자정 기준 반납처리할 도서 조회
+  @Query("SELECT l FROM Lend l WHERE l.returnDate <= FUNCTION('DATEADD', 'DAY', -7, CURRENT_DATE) AND l.returnStatus = false")
+  List<Lend> mFindAllByReturnDateAndReturnStatusFalse();
+*/
 
 }

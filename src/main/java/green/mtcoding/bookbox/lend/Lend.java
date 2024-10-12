@@ -20,10 +20,7 @@ public class Lend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @CreationTimestamp
     private Timestamp lendDate;
-    @Column(nullable = true)
     private Timestamp returnDate;
 
     @Column
@@ -42,6 +39,15 @@ public class Lend {
     public void prePersist() {
         this.returnStatus = false;
         this.extendStatus = false;
+
+    }
+
+    public void setReturnStatus(boolean returnStatus) {
+        this.returnStatus = returnStatus;
+    }
+
+    public void setReturnDate(Timestamp returnDate) {
+        this.returnDate = returnDate;
     }
 
     @Builder

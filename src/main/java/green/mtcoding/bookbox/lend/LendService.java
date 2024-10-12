@@ -7,9 +7,11 @@ import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi500;
 import green.mtcoding.bookbox.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +47,6 @@ public class LendService {
 
         // 이미 조회한 bookPS 사용
         Lend lendEntity = request.toEntity(user, bookPS);
-
         // Lend 엔티티 저장
         lendRepository.save(lendEntity);
 
@@ -91,7 +92,24 @@ public class LendService {
     }
 
     // 자동으로 반납시키기 ( 반납일 12시에 자동으로 반납됨 )
-    // 스케줄링 설정 ?
+    // 스케줄링 설정
+/*
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    public void 자동반납(){
+
+        // 반납 날짜가 오늘 날짜인 대여 데이터 검색
+        List<Lend> lendHistoryPS = lendRepository.mFindAllByReturnDateAndReturnStatusFalse();
+
+        // 반납 처리
+        for (Lend lend : lendHistoryPS) {
+            lend.setReturnStatus(true); // 반납 상태 업데이트
+            lend.setReturnDate(new Timestamp(System.currentTimeMillis())); // 반납일 설정
+            lendRepository.save(lend); // 저장
+        }
+
+    }
+*/
 
 
 
@@ -105,7 +123,7 @@ public class LendService {
 
     @Transactional
     public LendResponse.ExtensionDTO 대여중인도서연장(Long userId, LendRequest.ExtendDTO request){
-        // 연장 상태가 false 이면 true로 바꾸고, 반납한 일자 +7일
+        // 연장 상태가 false 이면 true로 바꾸고, 반납일자 +7일
         // 연장 상태가 true 이면 연장불가
         // 1. 조회
         Boolean resultPS = lendRepository.mCheckExtendStatus(userId, request.getIsbn13()).orElseThrow(() -> new ExceptionApi404("대여정보가 없습니다."));
@@ -127,6 +145,7 @@ public class LendService {
     // userId로 조회
     // 중복 제거
     public void 지금까지대여한도서들목록(Long userId){
+
 
 
     }

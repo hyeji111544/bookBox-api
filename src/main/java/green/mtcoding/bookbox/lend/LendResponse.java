@@ -44,13 +44,15 @@ public class LendResponse {
     public static class ExtensionDTO {
         private Long lendId; // 대여 pk
         private String isbn13; // 연장한 도서의 isbn
-        private Timestamp lendDate; // 대여한 일자 -> +7일된 날짜임
+        private Boolean returnStatus; // 반납상태
+        private Timestamp returnDate; // +7된 반납 예정일
         private Boolean extendStatus; // 연장 상태
 
         public ExtensionDTO(Lend lendPS) {
             this.lendId = lendPS.getId();
             this.isbn13 = lendPS.getBook().getIsbn13();
-            this.lendDate = lendPS.getLendDate();
+            this.returnStatus = lendPS.isReturnStatus();
+            this.returnDate = lendPS.getReturnDate();
             this.extendStatus = lendPS.isExtendStatus();
         }
     }
@@ -59,11 +61,13 @@ public class LendResponse {
     @Data
     public static class LendDTO {
         private Long lendId; // 대여 pk
-        private Timestamp lendDate; // 대여한 일자 -> 첨 대여한 날짜
+        private Timestamp lendDate; // 대여한 일자
+        private Timestamp returnDate;
 
         public LendDTO(Lend lendPS) {
             this.lendId = lendPS.getId();
             this.lendDate = lendPS.getLendDate();
+            this.returnDate = lendPS.getReturnDate();
         }
     }
 

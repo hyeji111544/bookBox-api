@@ -93,5 +93,19 @@ public class LendRepositoryTest {
         assertNotNull(lend.getReturnDate()); // 반납 날짜가 제대로 설정되었는지 확인
 
     }
+    @Test
+    public void mFindAllByReturnDateAndReturnStatusFalse(){
+        //when
+        List<Lend> lends = lendRepository.mFindAllByReturnDateAndReturnStatusFalse();
+
+        //eye
+        for(Lend lend : lends){
+            System.out.println(lend.isReturnStatus());
+            System.out.println(lend.getBook().getTitle());
+        }
+
+
+    }
+
 
 }
