@@ -1,4 +1,5 @@
 package green.mtcoding.bookbox.book;
+
 import green.mtcoding.bookbox.category.Category;
 import green.mtcoding.bookbox.comment.Comment;
 import jakarta.persistence.*;

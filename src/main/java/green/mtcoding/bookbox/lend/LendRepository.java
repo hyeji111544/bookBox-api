@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LendRepository extends JpaRepository<Lend, Long> {
 
@@ -15,11 +16,16 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     List<Object[]> mFindBooksByUserId(@Param("userId") Long userId);
 
     // 도서 연장 했는지 확인
-    @Query("select l.extendStatus from Lend l where l.user.id = :userId AND l.book.isbn13 = :bookId")
-    Boolean mCheckExtendStatus(@Param("userId") Long userId, @Param("bookId") String bookId);
+    @Query("select l.extendStatus from Lend l where l.user.id = :userId AND l.book.isbn13 = :isbn13")
+    Optional<Boolean> mCheckExtendStatus(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 
-    // 대여중인 도서 연장
+    // 대여중인 도서 연장 (lendDate +7 & extendStatus = true)
+    //@Query("update Lend l SET l.extendStatus = true, l.lendDate = FUNCTION('TIMESTAMPADD', 'DAY', 7, l.lendDate) where l.user.id = :userId AND l.book.isbn13 = :isbn13")
     @Modifying
-    @Query("update Lend l SET l.extendStatus = true where l.user.id = :userId AND l.book.isbn13 = :isbn13")
+    @Query(value = "UPDATE lend_tb SET extend_status = true, lend_date = DATEADD('DAY', 7, lend_date) WHERE user_id = :userId AND book_id = :isbn13", nativeQuery = true)
     void mExtendLend(@Param("userId") Long userId, @Param("isbn13") String isbn13);
+
+    // 해당 user와 book의 대여 엔티티 확인
+    @Query("select l from Lend l where l.user.id = :userId AND l.book.isbn13 = :isbn13")
+    Lend mFindLend(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 }
