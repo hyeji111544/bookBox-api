@@ -21,22 +21,24 @@ public class LendResponse {
                 this.books.add(new Book(isbn13, title, cover));
             }
         }
-    }
 
-    @Data
-    public static class Book {
-        private String isbn13;
-        private String title;
-        private String cover;
+        @Data
+        public static class Book {
+            private String isbn13;
+            private String title;
+            private String cover;
 
-        public Book(String isbn13, String title, String cover) {
-            this.isbn13 = isbn13;
-            this.title = title;
-            this.cover = cover;
+            public Book(String isbn13, String title, String cover) {
+                this.isbn13 = isbn13;
+                this.title = title;
+                this.cover = cover;
 
+            }
         }
+
     }
-    
+
+
     // 연장한 도서
     @Data
     public static class ExtensionDTO {
@@ -62,6 +64,20 @@ public class LendResponse {
         public LendDTO(Lend lendPS) {
             this.lendId = lendPS.getId();
             this.lendDate = lendPS.getLendDate();
+        }
+    }
+
+    // 반납한 도서 정보
+    @Data
+    public static class ReturnDTO {
+        private Long lendId; // 반납된 대여의 pk
+        private Timestamp returnDate; // 반납일
+        private Boolean returnStatus; // 반납상태
+
+        public ReturnDTO(Lend lendPS) {
+            this.lendId = lendPS.getId();
+            this.returnDate = lendPS.getReturnDate();
+            this.returnStatus = lendPS.isReturnStatus();
         }
     }
 

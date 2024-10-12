@@ -79,4 +79,23 @@ public void mCheckLendStatus_test(){
         }
     }
 
+    @Test
+    public void mUpdateLendStatusAndCountReturn_test(){
+        //given
+        String isbn13 = "9791187011590";
+
+        //when
+        Integer i = bookRepository.mUpdateLendStatusAndCountReturn(isbn13);
+
+        //eye
+        if(i==1){
+            Optional<Book> bookPS = bookRepository.findById(isbn13);
+            bookPS.ifPresent(System.out::println);
+            System.out.println(bookPS.get().getLendCount());
+            System.out.println(bookPS.get().isLendStatus());
+        }else{
+            throw new ExceptionApi500("반납 처리중 문제발생");
+        }
+    }
+
 }

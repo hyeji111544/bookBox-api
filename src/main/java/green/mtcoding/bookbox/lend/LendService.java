@@ -55,6 +55,45 @@ public class LendService {
     }
 
 
+    // book_Tb -> 대여상태 false, 대여수 -1
+    // lend_tb -> 반납한 일자 (now), 반납상태 -> true
+    @Transactional
+    public LendResponse.ReturnDTO 직접반납하기(Long userId, LendRequest.ReturnDTO request) {
+
+        // 대여상태인지 확인
+        Boolean b = bookRepository.mCheckLendStatus(request.getIsbn13()).orElseThrow(() -> new ExceptionApi404("요청하신 도서가 존재하지 않습니다."));
+
+        if(!b){
+            throw new ExceptionApi404("대여중인 도서가 아닙니다.");
+        }
+
+        // 2. booktb 대여 상태 바꾸기
+        int updateCount = bookRepository.mUpdateLendStatusAndCountReturn(request.getIsbn13());
+
+        // 업데이트가 성공했는지 확인 (1이 아니면 실패)
+        if (updateCount != 1) {
+            throw new ExceptionApi500("도서 반납 처리 중 문제가 발생했습니다.");
+        }
+
+        // 3.lend_tb 대여 상태 바꾸기
+        int returnStatus = lendRepository.mReturnLend(userId, request.getIsbn13());
+
+        // 업데이트 성공했는지 확인 (1이 아니면 실패)
+        if (returnStatus != 1) {
+            throw new ExceptionApi500("도서 반납 처리 중 문제가 발생했습니다.");
+        }
+        
+        // 반납정보 return
+        Lend lendPS = lendRepository.mFindLend(userId, request.getIsbn13());
+
+        return new LendResponse.ReturnDTO(lendPS);
+
+    }
+
+    // 자동으로 반납시키기 ( 반납일 12시에 자동으로 반납됨 )
+    // 스케줄링 설정 ?
+
+
 
 
     public LendResponse.ListDTO 대여중도서목록조회(Long userId){
@@ -82,6 +121,13 @@ public class LendService {
         Lend lendPS = lendRepository.mFindLend(userId, request.getIsbn13());
 
         return new LendResponse.ExtensionDTO(lendPS);
+
+    }
+
+    // userId로 조회
+    // 중복 제거
+    public void 지금까지대여한도서들목록(Long userId){
+
 
     }
 }

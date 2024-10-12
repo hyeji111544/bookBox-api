@@ -21,12 +21,20 @@ public class LendController {
 
         LendResponse.LendDTO result = lendService.대여하기(userId, request);
 
-        return ResponseEntity.ok(Resp.ok(result));
+        return ResponseEntity.ok(Resp.ok(result, "대여되었습니다. 내서재에서 대여된 도서를 확인하세요."));
     }
 
-
-
     // 반납하기
+    @PutMapping("/api/lends/return")
+    public ResponseEntity<?>  lendReturn(@RequestHeader("Authorization") String token, @RequestBody LendRequest.ReturnDTO request){
+        String jwtToken = token.replace("Bearer ", "");
+        Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+
+        LendResponse.ReturnDTO result = lendService.직접반납하기(userId, request);
+
+        return ResponseEntity.ok(Resp.ok(result, "성공적으로 반납되었습니다."));
+    }
+
 
 
     // 현재 대여중인 도서 목록
@@ -55,6 +63,17 @@ public class LendController {
     }
 
 
-    // 지금까지 대여했던 도서 목록
+    // 지금까지 대여했던 도서들 리스트
+    @GetMapping("/api/lends/list/history")
+    public void lendListSoFar(@RequestHeader("Authorization") String token){
 
+        // 중복 제거 필요
+        String jwtToken = token.replace("Bearer ", "");
+        Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+
+        lendService.지금까지대여한도서들목록(userId);
+
+
+
+    }
 }

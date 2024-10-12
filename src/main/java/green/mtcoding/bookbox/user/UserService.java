@@ -21,9 +21,9 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserResponse.JoinDTO 회원가입(MultipartFile profile, UserRequest.JoinDTO joinDTO) {
+    public UserResponse.JoinDTO 회원가입(UserRequest.JoinDTO joinDTO) {
 
-        String imageFileName = MyFile.파일저장(profile);
+        //String imageFileName = MyFile.파일저장(profile);
 
         Optional<User> userOP= userRepository.findByUsername(joinDTO.getUsername());
         if(userOP.isPresent()) {
@@ -32,7 +32,7 @@ public class UserService {
 
         User userPS = userRepository.save(joinDTO.toEntity());
 
-        userPS.setProfile(imageFileName);
+        userPS.setProfile("nobody.png");
 
         return new UserResponse.JoinDTO(userPS);
     }

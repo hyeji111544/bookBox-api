@@ -27,5 +27,12 @@ public class LendRequest {
         private String isbn13;
     }
 
+    @Data
+    public static class ReturnDTO {
+
+        @NotEmpty
+        private String isbn13;
+    }
+
 
 }
