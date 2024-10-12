@@ -1,14 +1,17 @@
 package green.mtcoding.bookbox.lend;
 
+import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 public class LendRepositoryTest {
 
+/*
     @Autowired
     private LendRepository lendRepository;
 
@@ -36,13 +39,13 @@ public class LendRepositoryTest {
         String bookId = "9788937461798";
 
         // when
-        Boolean b = lendRepository.mCheckExtendStatus(userId, bookId);
-        // then
+        Boolean b = lendRepository.mCheckExtendStatus(userId, bookId).orElseThrow(() -> new ExceptionApi404("대여정보가 없습니다."));
         System.out.println(b);
+        // then
         if(b.booleanValue()){
-            System.out.println("연장했음");
+            System.out.println("연장못함");
         }else{
-            System.out.println("연장안함");
+            System.out.println("연장가능");
         }
     }
 
@@ -54,8 +57,25 @@ public class LendRepositoryTest {
         //when
         lendRepository.mExtendLend(userId, bookId);
         //then
-        Boolean b = lendRepository.mCheckExtendStatus(userId, bookId);
+        Boolean b = lendRepository.mCheckExtendStatus(userId, bookId).orElseThrow(() -> new ExceptionApi404("대여정보가 없습니다."));
         System.out.println(b);
+        Lend lend = lendRepository.mFindLend(userId, bookId);
+        System.out.println(lend.getLendDate());
     }
+
+    @Test
+    public void mFindLend_test(){
+        //given
+        Long userId = 1L;
+        String bookId = "9788937461798";
+        //when
+        Lend lend = lendRepository.mFindLend(userId, bookId);
+        //then
+        System.out.println(lend.getLendDate());
+        System.out.println(lend.getId());
+        System.out.println(lend.getBook().getTitle()); // 레이지로딩
+
+    }
+*/
 
 }

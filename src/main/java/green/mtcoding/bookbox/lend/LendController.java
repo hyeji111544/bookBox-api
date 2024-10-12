@@ -13,9 +13,24 @@ public class LendController {
 
     private final LendService lendService;
 
+    // 대여하기
+    @PostMapping("/api/lends")
+    public ResponseEntity<?> lendDo(@RequestHeader("Authorization") String token, @RequestBody LendRequest.SaveDTO request){
+        String jwtToken = token.replace("Bearer ", "");
+        Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+
+        LendResponse.LendDTO result = lendService.대여하기(userId, request);
+
+        return ResponseEntity.ok(Resp.ok(result));
+    }
+
+
+
+    // 반납하기
+
 
     // 현재 대여중인 도서 목록
-    @GetMapping("/api/lend/list")
+    @GetMapping("/api/lends/list")
     public ResponseEntity<?> lendList(@RequestHeader("Authorization") String token){ //request객체로 받는걸로 바꾸기
         // Bearer 제거
         String jwtToken = token.replace("Bearer ", "");
@@ -26,17 +41,19 @@ public class LendController {
 
         return ResponseEntity.ok(Resp.ok(listDTO));
     }
-/*
+
 
     // 대여중인 도서 연장
-    @PutMapping("/api/lend/extension")
-    public ResponseEntity<?> lendList(@RequestHeader("Authorization") String token, LendRequest.DTO request){
+    @PutMapping("/api/lends/extension")
+    public ResponseEntity<?> lendExtension(@RequestHeader("Authorization") String token, @RequestBody LendRequest.ExtendDTO request){
         String jwtToken = token.replace("Bearer ", "");
         Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
 
-        lendService.대여중인도서연장(userId,request);
+        LendResponse.ExtensionDTO result = lendService.대여중인도서연장(userId,request);
+
+        return ResponseEntity.ok(Resp.ok(result));
     }
-*/
+
 
     // 지금까지 대여했던 도서 목록
 

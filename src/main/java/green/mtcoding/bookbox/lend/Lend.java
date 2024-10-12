@@ -4,6 +4,7 @@ package green.mtcoding.bookbox.lend;
 import green.mtcoding.bookbox.book.Book;
 import green.mtcoding.bookbox.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,7 +26,9 @@ public class Lend {
     @Column(nullable = true)
     private Timestamp returnDate;
 
+    @Column
     private boolean returnStatus;
+    @Column
     private boolean extendStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,5 +44,14 @@ public class Lend {
         this.extendStatus = false;
     }
 
-
+    @Builder
+    public Lend(Long id, Timestamp lendDate, Timestamp returnDate, boolean returnStatus, boolean extendStatus, User user, Book book) {
+        this.id = id;
+        this.lendDate = lendDate;
+        this.returnDate = returnDate;
+        this.returnStatus = returnStatus;
+        this.extendStatus = extendStatus;
+        this.user = user;
+        this.book = book;
+    }
 }

@@ -2,6 +2,7 @@ package green.mtcoding.bookbox.book;
 
 import green.mtcoding.bookbox.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,6 +23,20 @@ public interface BookRepository extends JpaRepository<Book, String> {
     //카테고리 누르면 해당 책들 나올 수 있게 만들기
     @Query("select b from Book b where b.category.id =:id")
     List<Book> mFindByCategoryId(@Param("id") String id);
+
+
+
+
+
+
+    // 대여 상태인지 확인
+    @Query("select b.lendStatus from Book b where b.isbn13 = :isbn13")
+    Optional<Boolean> mCheckLendStatus(@Param("isbn13") String isbn13);
+
+    // 해당 북 대여상태로 바꾸기
+    @Modifying
+    @Query("UPDATE Book b SET b.lendStatus = true, b.lendCount = b.lendCount + 1 WHERE b.isbn13 = :isbn13")
+    Integer mUpdateLendStatusAndCount(@Param("isbn13") String isbn13);
 
 
 }
