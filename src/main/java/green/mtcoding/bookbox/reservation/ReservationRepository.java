@@ -12,6 +12,9 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
+    // 예약 중복 확인
+    boolean existsByUserAndBookAndCancelDateIsNull(User user, Book book);
+
     // 해당 도서에 대한 현재 예약수 조회 메소드
     @Query("select count(r) from Reservation r where r.book.isbn13 = :isbn13 and r.cancelDate is null")
     int countCurrentReservations(@Param("isbn13") String isbn13);

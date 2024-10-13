@@ -1,5 +1,6 @@
 package green.mtcoding.bookbox.reservation;
 
+import green.mtcoding.bookbox.core.util.JwtUtil;
 import green.mtcoding.bookbox.core.util.Resp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,19 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
+    // 도서 예약
     @PostMapping("/api/books/reservation/{isbn13}")
-    public ResponseEntity<?> reserveBook(@PathVariable String isbn13, @RequestParam Long userId) {
-        reservationService.도서예약(userId, isbn13);
-        return ResponseEntity.ok(Resp.ok("예약이 완료되었습니다"));
+    public ResponseEntity<?> reserveBook(
+            @RequestHeader("Authorization") String token,
+            @PathVariable String isbn13) {
+
+        // JWT 토큰에서 유저 ID 추출
+        String jwtToken = token.replace("Bearer ", "");
+        Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+
+        ReservationResponse.ReservationDTO reservationDTO = reservationService.도서예약(userId, isbn13);
+
+        return ResponseEntity.ok(Resp.ok(reservationDTO, "예약이 완료되었습니다."));
     }
 
 
