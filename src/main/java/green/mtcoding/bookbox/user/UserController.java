@@ -29,7 +29,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/join")
-    public ResponseEntity<?> join(@Valid @ModelAttribute UserRequest.JoinDTO joinDTO, Errors errors, @RequestParam("profile") MultipartFile profile) {
+    public ResponseEntity<?> join(@Valid @RequestBody UserRequest.JoinDTO joinDTO, Errors errors) {
 
 /*
         , @RequestHeader("Authorization") String accessToken
@@ -42,7 +42,7 @@ public class UserController {
         User user = JwtUtil.verify(accessToken);
         //String username = claims.getSubject(); // JWT에서 유저명 추출*/
 
-        UserResponse.JoinDTO result = userService.회원가입(profile, joinDTO);
+        UserResponse.JoinDTO result = userService.회원가입(joinDTO);
         return ResponseEntity.ok(Resp.ok(result, "회원가입이 완료되었습니다."));
     }
 

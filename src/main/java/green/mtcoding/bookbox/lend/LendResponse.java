@@ -1,13 +1,16 @@
 package green.mtcoding.bookbox.lend;
 
+import green.mtcoding.bookbox.book.Book;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LendResponse {
-
+    
+    // 대여중인 도서목록
     @Data
     public static class ListDTO {
 
@@ -21,48 +24,91 @@ public class LendResponse {
                 this.books.add(new Book(isbn13, title, cover));
             }
         }
-    }
 
-    @Data
-    public static class Book {
-        private String isbn13;
-        private String title;
-        private String cover;
+        @Data
+        public static class Book {
+            private String isbn13;
+            private String title;
+            private String cover;
 
-        public Book(String isbn13, String title, String cover) {
-            this.isbn13 = isbn13;
-            this.title = title;
-            this.cover = cover;
+            public Book(String isbn13, String title, String cover) {
+                this.isbn13 = isbn13;
+                this.title = title;
+                this.cover = cover;
 
+            }
         }
+
     }
-    
-    // 연장한 도서
+
+
+    // 방금 연장한 도서 정보 리턴
     @Data
     public static class ExtensionDTO {
         private Long lendId; // 대여 pk
         private String isbn13; // 연장한 도서의 isbn
-        private Timestamp lendDate; // 대여한 일자 -> +7일된 날짜임
+        private Boolean returnStatus; // 반납상태
+        private Timestamp returnDate; // +7된 반납 예정일
         private Boolean extendStatus; // 연장 상태
 
         public ExtensionDTO(Lend lendPS) {
             this.lendId = lendPS.getId();
             this.isbn13 = lendPS.getBook().getIsbn13();
-            this.lendDate = lendPS.getLendDate();
+            this.returnStatus = lendPS.isReturnStatus();
+            this.returnDate = lendPS.getReturnDate();
             this.extendStatus = lendPS.isExtendStatus();
         }
     }
 
-    // 대여 id + 추가로 대여한 날짜
+    // 방금 대여한 도서 정보 리턴
     @Data
     public static class LendDTO {
         private Long lendId; // 대여 pk
-        private Timestamp lendDate; // 대여한 일자 -> 첨 대여한 날짜
+        private Timestamp lendDate; // 대여한 일자
+        private Timestamp returnDate;
 
         public LendDTO(Lend lendPS) {
             this.lendId = lendPS.getId();
             this.lendDate = lendPS.getLendDate();
+            this.returnDate = lendPS.getReturnDate();
         }
     }
 
+    // 방금 반납한 도서 정보
+    @Data
+    public static class ReturnDTO {
+        private Long lendId; // 반납된 대여의 pk
+        private Timestamp returnDate; // 반납일
+        private Boolean returnStatus; // 반납상태
+
+        public ReturnDTO(Lend lendPS) {
+            this.lendId = lendPS.getId();
+            this.returnDate = lendPS.getReturnDate();
+            this.returnStatus = lendPS.isReturnStatus();
+        }
+    }
+
+    // 총 대여 내역
+    // 대여 일자, 반납일자, ISBN13, 책사진, 책제목
+    @Data
+    public static class HistoryDTO {
+        private Long lendId;
+        private Timestamp lendDate;
+        private Timestamp returnDate;
+        private boolean returnStatus;
+        private String isbn13;
+        private String title;
+        private String cover;
+
+        public HistoryDTO(Lend lend, Book book) {
+            this.lendId = lend.getId();
+            this.lendDate = lend.getLendDate();
+            this.returnDate = lend.getReturnDate();
+            this.returnStatus = lend.isReturnStatus();
+            this.isbn13 = book.getIsbn13();
+            this.title = book.getTitle();
+            this.cover = book.getCover();
+        }
+
+    }
 }
