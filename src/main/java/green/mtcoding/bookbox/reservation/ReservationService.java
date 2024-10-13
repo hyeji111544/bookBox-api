@@ -4,6 +4,7 @@ package green.mtcoding.bookbox.reservation;
 import green.mtcoding.bookbox.book.Book;
 import green.mtcoding.bookbox.book.BookRepository;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
+import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.lend.Lend;
 import green.mtcoding.bookbox.lend.LendRepository;
 import green.mtcoding.bookbox.user.User;
@@ -26,27 +27,48 @@ public class ReservationService {
     private final UserRepository userRepository;
     private final LendRepository lendRepository;
 
-    public Reservation 도서예약(Long userId, String isbn13) {
-        // 현재 예약 인원 수 확인
+    // 도서 예약하기
+    @Transactional
+    public ReservationResponse.ReservationDTO 도서예약(Long userId, String isbn13) {
+        // 유저 정보 로드
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ExceptionApi404("해당 유저를 찾을 수 없습니다."));
+
+        // 도서 대여 상태 확인
+        Book book = bookRepository.findById(isbn13).orElseThrow(() -> new ExceptionApi404("해당 도서를 찾을 수 없습니다."));
+        if (book.isLendStatus()) {  // true면 도서가 반납된 상태로 예약 불가능
+            throw new ExceptionApi400("이 도서는 대여 가능한 상태라서 예약이 불가능합니다.");
+        }
+
+        // 예약 중복 확인 (해당 유저가 이미 예약한 도서인지 체크)
+        boolean isAlreadyReserved = reservationRepository.existsByUserAndBookAndCancelDateIsNull(user, book);
+        if (isAlreadyReserved) {
+            throw new ExceptionApi400("이미 예약한 도서입니다.");
+        }
+
+        // 예약 가능 인원 수 확인 (최대 3명)
         int currentReservationCount = reservationRepository.countCurrentReservations(isbn13);
         if (currentReservationCount >= 3) {
-            throw new IllegalStateException("예약 인원이 다 찼습니다.");
+            throw new ExceptionApi400("예약 인원이 다 찼습니다. 예약이 불가능합니다.");
         }
 
         // 예약 등록
-        Book book = bookRepository.findByIsbn13(isbn13).orElseThrow(() -> new ExceptionApi400("도서정보를 찾을 수 없습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
-
         Reservation reservation = new Reservation();
         reservation.setUser(user);
         reservation.setBook(book);
         reservation.setReservationDate(Timestamp.valueOf(LocalDateTime.now()));
+        reservation.setSequence(currentReservationCount + 1); // 예약 순번 설정
 
-        // 현재 예약 인원 수에 따라 sequence 설정 (1부터 카운트)
-        reservation.setSequence(currentReservationCount + 1);
+        reservationRepository.save(reservation);
 
-        return reservationRepository.save(reservation);
+        return new ReservationResponse.ReservationDTO (
+            reservation.getBook().getTitle(),
+            reservation.getReservationDate().toLocalDateTime(),
+            reservation.getSequence()
+        );
+
     }
+
 
     // 예약 취소
     public void 예약취소(Long userId, String isbn13) {
@@ -77,13 +99,16 @@ public class ReservationService {
         return reservations.stream()
                 .map(reservation -> new ReservationResponse.ReservationDTO(
                         reservation.getBook().getTitle(),
-                        reservation.getReservationDate().toLocalDateTime()
+                        reservation.getReservationDate().toLocalDateTime(),
+                        reservation.getSequence()
                 ))
                 .collect(Collectors.toList());
     }
 
     // 반납 시 자동 대여 로직
+    @Transactional
     public void 자동대여(String isbn13) {
+        // 첫 번째 예약자 확인
         Reservation firstReservation = reservationRepository.findReservationsByBook(isbn13)
                 .stream()
                 .findFirst()
@@ -96,8 +121,11 @@ public class ReservationService {
             newLend.setBook(firstReservation.getBook());
             lendRepository.save(newLend);
 
-            // 예약 정보 삭제 또는 업데이트
+            // 예약 정보 삭제
             reservationRepository.delete(firstReservation);
+
+            // 예약 순번 업데이트
+            reservationRepository.updateReservationSequences(isbn13, firstReservation.getSequence());
         }
     }
 

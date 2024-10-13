@@ -5,6 +5,8 @@ import green.mtcoding.bookbox.book.BookRepository;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi500;
+import green.mtcoding.bookbox.reservation.ReservationRepository;
+import green.mtcoding.bookbox.reservation.ReservationService;
 import green.mtcoding.bookbox.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +23,8 @@ public class LendService {
 
     private final LendRepository lendRepository;
     private final BookRepository bookRepository;
+    private final ReservationRepository reservationRepository;
+    private final ReservationService reservationService;
 
     @Transactional
     public LendResponse.LendDTO 대여하기(Long userId, LendRequest.SaveDTO request) {
@@ -81,6 +85,17 @@ public class LendService {
         if (returnStatus != 1) {
             throw new ExceptionApi500("도서 반납 처리 중 문제가 발생했습니다.");
         }
+
+
+        // TODO: 반납 후 예약자가 있는지 확인하여 처리 - 신민재
+        boolean hasReservations = reservationRepository.countCurrentReservations(request.getIsbn13()) > 0;
+
+        if (hasReservations) {
+            // 첫 번째 예약자에게 자동 대여 처리
+            reservationService.자동대여(request.getIsbn13());
+        }
+
+
 
         // 4. 반납정보 return
         Lend lendPS = lendRepository.mFindLend(userId, request.getIsbn13());
