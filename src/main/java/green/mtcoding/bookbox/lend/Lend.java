@@ -60,4 +60,12 @@ public class Lend {
         this.user = user;
         this.book = book;
     }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
 }

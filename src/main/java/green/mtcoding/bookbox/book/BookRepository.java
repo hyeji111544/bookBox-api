@@ -44,4 +44,8 @@ public interface BookRepository extends JpaRepository<Book, String> {
     Integer mUpdateLendStatusAndCountReturn(@Param("isbn13") String isbn13);
 
 
+    // isbn으로 도서 찾기
+    Optional<Book> findByIsbn13(String isbn13);
+
+
 }
