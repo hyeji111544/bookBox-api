@@ -1,13 +1,16 @@
 package green.mtcoding.bookbox.lend;
 
+import green.mtcoding.bookbox.book.Book;
 import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LendResponse {
-
+    
+    // 대여중인 도서목록
     @Data
     public static class ListDTO {
 
@@ -39,7 +42,7 @@ public class LendResponse {
     }
 
 
-    // 연장한 도서
+    // 방금 연장한 도서 정보 리턴
     @Data
     public static class ExtensionDTO {
         private Long lendId; // 대여 pk
@@ -57,7 +60,7 @@ public class LendResponse {
         }
     }
 
-    // 대여 id + 추가로 대여한 날짜
+    // 방금 대여한 도서 정보 리턴
     @Data
     public static class LendDTO {
         private Long lendId; // 대여 pk
@@ -71,7 +74,7 @@ public class LendResponse {
         }
     }
 
-    // 반납한 도서 정보
+    // 방금 반납한 도서 정보
     @Data
     public static class ReturnDTO {
         private Long lendId; // 반납된 대여의 pk
@@ -85,4 +88,27 @@ public class LendResponse {
         }
     }
 
+    // 총 대여 내역
+    // 대여 일자, 반납일자, ISBN13, 책사진, 책제목
+    @Data
+    public static class HistoryDTO {
+        private Long lendId;
+        private Timestamp lendDate;
+        private Timestamp returnDate;
+        private boolean returnStatus;
+        private String isbn13;
+        private String title;
+        private String cover;
+
+        public HistoryDTO(Lend lend, Book book) {
+            this.lendId = lend.getId();
+            this.lendDate = lend.getLendDate();
+            this.returnDate = lend.getReturnDate();
+            this.returnStatus = lend.isReturnStatus();
+            this.isbn13 = book.getIsbn13();
+            this.title = book.getTitle();
+            this.cover = book.getCover();
+        }
+
+    }
 }

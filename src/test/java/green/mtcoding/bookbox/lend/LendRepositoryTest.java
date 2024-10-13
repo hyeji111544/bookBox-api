@@ -1,12 +1,15 @@
 package green.mtcoding.bookbox.lend;
 
+import green.mtcoding.bookbox.book.Book;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,7 +21,7 @@ public class LendRepositoryTest {
     private LendRepository lendRepository;
 
     @Test
-    public void mFindBooksByUserId_test(){
+    public void mFindBooksByUserId_test() {
 
         // given
         Long userId = 1L;
@@ -35,7 +38,7 @@ public class LendRepositoryTest {
     }
 
     @Test
-    public void mCheckExtendStatus_test(){
+    public void mCheckExtendStatus_test() {
         // given
         Long userId = 1L;
         String bookId = "9788937461798";
@@ -44,15 +47,15 @@ public class LendRepositoryTest {
         Boolean b = lendRepository.mCheckExtendStatus(userId, bookId).orElseThrow(() -> new ExceptionApi404("대여정보가 없습니다."));
         System.out.println(b);
         // eye
-        if(b.booleanValue()){
+        if (b.booleanValue()) {
             System.out.println("연장못함");
-        }else{
+        } else {
             System.out.println("연장가능");
         }
     }
 
     @Test
-    public void mExtendLend_test(){
+    public void mExtendLend_test() {
         //given
         Long userId = 1L;
         String bookId = "9788937461798";
@@ -66,7 +69,7 @@ public class LendRepositoryTest {
     }
 
     @Test
-    public void mFindLend_test(){
+    public void mFindLend_test() {
         //given
         Long userId = 1L;
         String bookId = "9788937461798";
@@ -80,7 +83,7 @@ public class LendRepositoryTest {
     }
 
     @Test
-    public void mReturnLend_test(){
+    public void mReturnLend_test() {
         //given
         Long userId = 1L;
         String bookId = "9788937461798";
@@ -93,6 +96,33 @@ public class LendRepositoryTest {
         assertNotNull(lend.getReturnDate()); // 반납 날짜가 제대로 설정되었는지 확인
 
     }
+
+    @Test
+    public void mFindLendsAndBooksByUserId() {
+        //given
+        Long userId = 1L;
+
+        //when
+        List<Object[]> results = lendRepository.mFindLendsAndBooksByUserId(userId);
+
+        //eye
+        for (Object[] result : results) {
+            Lend lend = (Lend) result[0];
+            Book book = (Book) result[1];
+
+            System.out.println(lend.getId());
+            System.out.println(book.getTitle());
+        }
+
+
+    }
+
+}
+
+
+
+
+/*
     @Test
     public void mFindAllByReturnDateAndReturnStatusFalse(){
         //when
@@ -106,6 +136,6 @@ public class LendRepositoryTest {
 
 
     }
+*/
 
 
-}

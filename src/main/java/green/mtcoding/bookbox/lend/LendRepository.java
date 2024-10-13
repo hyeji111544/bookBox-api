@@ -1,6 +1,7 @@
 package green.mtcoding.bookbox.lend;
 
 
+import green.mtcoding.bookbox.book.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,7 +35,9 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     @Query(value = "UPDATE lend_tb SET return_status = true, return_date = CURRENT_TIMESTAMP WHERE user_id = :userId AND book_id = :isbn13 AND return_status = false", nativeQuery = true)
     Integer mReturnLend(@Param("userId") Long userId, @Param("isbn13") String isbn13);
 
-
+    // 지금까지 대여한 도서 목록
+    @Query("SELECT DISTINCT l, l.book FROM Lend l JOIN l.book b WHERE l.user.id = :userId")
+    List<Object[]> mFindLendsAndBooksByUserId(@Param("userId") Long userId);
 
 /*
     // 자정 기준 반납처리할 도서 조회

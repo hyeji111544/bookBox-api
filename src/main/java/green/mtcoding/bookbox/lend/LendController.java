@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class LendController {
@@ -25,6 +27,7 @@ public class LendController {
     }
 
     // 반납하기
+    // TODO: 다음 예약자에게 자동으로 넘어가도록 처리
     @PutMapping("/api/lends/return")
     public ResponseEntity<?>  lendReturn(@RequestHeader("Authorization") String token, @RequestBody LendRequest.ReturnDTO request){
         String jwtToken = token.replace("Bearer ", "");
@@ -45,7 +48,7 @@ public class LendController {
         // JWT에서 userId 추출
         Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
 
-        LendResponse.ListDTO listDTO = lendService.대여중도서목록조회(userId);
+        LendResponse.ListDTO listDTO = lendService.대여중인도서목록조회(userId);
 
         return ResponseEntity.ok(Resp.ok(listDTO));
     }
@@ -65,14 +68,15 @@ public class LendController {
 
     // 지금까지 대여했던 도서들 리스트
     @GetMapping("/api/lends/list/history")
-    public void lendListSoFar(@RequestHeader("Authorization") String token){
+    public ResponseEntity<?> lendListSoFar(@RequestHeader("Authorization") String token){
 
         // 중복 제거 필요
         String jwtToken = token.replace("Bearer ", "");
         Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
 
-        lendService.지금까지대여한도서들목록(userId);
+        List<LendResponse.HistoryDTO> result = lendService.지금까지대여한도서들목록(userId);
 
+        return ResponseEntity.ok(Resp.ok(result));
 
 
     }
