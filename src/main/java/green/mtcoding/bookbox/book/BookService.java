@@ -44,14 +44,22 @@ public class BookService {
     }
 
 
-//    public BookResponse.BookSearchDTO 검색기록보기(String title, String author, String publisher){
-//
-//        if(title == null || author == null || publisher == null){
-//            List<Book> bookPG = bookRepository.findAll();
-//            return new BookResponse.BookSearchDTO(bookPG, "");
-//        }
-//        List<Book> searchBookList = bookRepository.mFindAll(title, author, publisher);
-//    }
+    public List<BookResponse.CategoryDTO> 메인목록보기V2(){
+        System.out.println("1");
+        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
+        System.out.println("2");
+        List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
+        System.out.println("3");
+        for(Category category : categories){
+            System.out.println("4");
+            BookResponse.CategoryDTO dto = new BookResponse.CategoryDTO(category);
+            System.out.println("5");
+            dtos.add(dto);
+            System.out.println("6");
+        }
+        System.out.println("7");
+        return dtos;
+    }
 
 
     public List<BookResponse.CategoryDTO> 책과카테고리보기(){

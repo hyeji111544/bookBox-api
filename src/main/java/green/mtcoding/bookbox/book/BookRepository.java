@@ -17,7 +17,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
     @Query("select b from Book b left join fetch b.category c")
     List<Book> mFindAllWithCategory();
     //메인에 보일 것 테스트
-    @Query("select b from Book b left join fetch b.category c")
+    @Query("select b from Category b left join fetch b.books c")
     List<Category> mFindAllWithCategoryV2();
 
     //카테고리 누르면 해당 책들 나올 수 있게 만들기
