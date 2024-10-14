@@ -24,8 +24,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     // 예약 순번 업데이트
     @Modifying
-    @Query("UPDATE Reservation r SET r.sequence = r.sequence - 1 WHERE r.book.isbn13 = :isbn13 AND r.sequence > :currentSequence")
-    void updateReservationSequences(@Param("isbn13") String isbn13, @Param("currentSequence") int currentSequence);
+    @Query("UPDATE Reservation r SET r.sequence = r.sequence - 1 WHERE r.book.isbn13 = :isbn13 AND r.sequence > :cancelledSequence")
+    void updateReservationSequences(@Param("isbn13") String isbn13, @Param("cancelledSequence") int cancelledSequence);
+
 
     // 도서 예약 목록 조회
     @Query("select r from Reservation r where r.book.isbn13 = :isbn13 and r.cancelDate is null order by r.reservationDate asc")

@@ -48,6 +48,10 @@ public class JwtUtil {
                 .build();
     }
 
+
+
+
+
     // =============================================
 
 
@@ -95,6 +99,8 @@ public class JwtUtil {
         // 'id' 클레임에서 값 추출
         return decodedJWT.getClaim("id").asLong();
     }
+
+
 
 
 }
