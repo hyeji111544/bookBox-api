@@ -43,17 +43,17 @@ public class BookService {
         return dtos;
     }
 
-//    public List<BookResponse.BookListDTO> 메인책목록보기(){
-//        List<Book> books = bookRepository.mFindAllWithCategory();
-//        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
-//        for(Book book : books) {
-//            BookResponse.BookListDTO dto = new BookResponse.BookListDTO(book);
-//            dtos.add(dto);
-//        }
-//        return dtos;
-//    }
+    public List<BookResponse.BookListDTO> 메인책목록보기(){
+        List<Book> books = bookRepository.mFindBooksWithCategory();
+        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
+        for(Book book : books) {
+            BookResponse.BookListDTO dto = new BookResponse.BookListDTO(book);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
 
-    public List<BookResponse.CategoryDTO> 메인목록보기(){
+    public List<BookResponse.CategoryDTO> 메인책과카테고리목록보기(){
         List<Category> categories = bookRepository.mFindAllWithCategory();
         List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
         for(Category category : categories){
@@ -102,7 +102,6 @@ public class BookService {
                 .orElseThrow(() -> new ExceptionApi400("도서를 찾을 수 없습니다."));
         return new BookResponse.BookDetailDTO(book);
     }
-
 
     public List<BookResponse.clickCategoryDTO> 카테고리별책보기(String id){
         List<Book> bookList = bookRepository.mFindByCategoryId(id);

@@ -17,14 +17,17 @@ public class BookController {
 
     private final BookService bookService;
 
-//        @GetMapping("/")
-//    public ResponseEntity<?> list(){
-//        List<BookResponse.BookListDTO> bookDTO = bookService.메인책목록보기();
-//        return ResponseEntity.ok(Resp.ok(bookDTO));
-//    }
+    //책만 보이는 메인
+    @GetMapping("/")
+    public ResponseEntity<?> list() {
+        List<BookResponse.BookListDTO> bookDTO = bookService.메인책목록보기();
+        return ResponseEntity.ok(Resp.ok(bookDTO));
+    }
+
+    //책, 카테고리 다 보이는 메인
     @GetMapping("/api/main/book-list")
     public ResponseEntity<?> mainList() {
-        List<BookResponse.CategoryDTO> categoryDTOS = bookService.메인목록보기();
+        List<BookResponse.CategoryDTO> categoryDTOS = bookService.메인책과카테고리목록보기();
         return ResponseEntity.ok(Resp.ok(categoryDTOS));
     }
 
@@ -39,4 +42,5 @@ public class BookController {
         List<BookResponse.BookSearchDTO> searchDTOS = bookService.검색기록보기(keyword);
         return ResponseEntity.ok(Resp.ok(searchDTOS));
     }
+
 }
