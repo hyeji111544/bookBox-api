@@ -43,46 +43,17 @@ public class BookService {
         return dtos;
     }
 
-
-    public List<BookResponse.CategoryDTO> 메인목록보기V2(){
-        System.out.println("1");
-        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
-        System.out.println("2");
-        List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
-        System.out.println("3");
-        for(Category category : categories){
-            System.out.println("4");
-            BookResponse.CategoryDTO dto = new BookResponse.CategoryDTO(category);
-            System.out.println("5");
-            dtos.add(dto);
-            System.out.println("6");
-        }
-        System.out.println("7");
-        return dtos;
-    }
-
-
-    public List<BookResponse.CategoryDTO> 책과카테고리보기(){
-        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
-        List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
-        for(Category category : categories) {
-            BookResponse.CategoryDTO dto = new BookResponse.CategoryDTO(category);
+    public List<BookResponse.BookListDTO> 메인책목록보기(){
+        List<Book> books = bookRepository.mFindBooksWithCategory();
+        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
+        for(Book book : books) {
+            BookResponse.BookListDTO dto = new BookResponse.BookListDTO(book);
             dtos.add(dto);
         }
         return dtos;
     }
 
-//    public List<BookResponse.BookListDTO> 메인책목록보기(){
-//        List<Book> books = bookRepository.mFindAllWithCategory();
-//        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
-//        for(Book book : books) {
-//            BookResponse.BookListDTO dto = new BookResponse.BookListDTO(book);
-//            dtos.add(dto);
-//        }
-//        return dtos;
-//    }
-
-    public List<BookResponse.CategoryDTO> 메인목록보기(){
+    public List<BookResponse.CategoryDTO> 메인책과카테고리목록보기(){
         List<Category> categories = bookRepository.mFindAllWithCategory();
         List<BookResponse.CategoryDTO> dtos = new ArrayList<>();
         for(Category category : categories){
