@@ -40,9 +40,4 @@ public class BookController {
         return ResponseEntity.ok(Resp.ok(searchDTOS));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(name = "keyword") String keyword) {
-        List<BookResponse.BookSearchDTO> searchDTOS = bookService.검색기록보기(keyword);
-        return ResponseEntity.ok(Resp.ok(searchDTOS));
-    }
 }

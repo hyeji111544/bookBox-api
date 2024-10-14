@@ -32,7 +32,7 @@ public class BookService {
         List<Book> searchBookList = bookRepository.mFindAll(keyword);
         //만약 검색결과가 없을 때
         if(searchBookList.isEmpty()){
-            throw new ExceptionApi404("검색 결과가 없습니다.");
+         throw new ExceptionApi404("검색 결과가 없습니다.");
         }
         //검색 결과가 있을 때
         List<BookResponse.BookSearchDTO> dtos = new ArrayList<>();
