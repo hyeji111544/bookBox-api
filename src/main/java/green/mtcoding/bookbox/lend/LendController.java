@@ -45,7 +45,7 @@ public class LendController {
 
         LendResponse.AutoReturnDTO result = lendService.자동반납();
 
-        return ResponseEntity.ok(Resp.ok(result));
+        return ResponseEnti    ty.ok(Resp.ok(result));
     }*/
 
     // 현재 대여중인 도서 목록

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.swing.text.View;
+import java.sql.Timestamp;
 
 public class UserResponse {
     // 회원가입
@@ -39,6 +40,61 @@ public class UserResponse {
         }
     }
 
+    @Data
+    public static class UpdateInfoDTO {
+        private Long id;
+        private String username;
+        private String nick;
+        private String password;
+        private String email;
+        private String phone;
+        private String profile;
+        private Timestamp modifiedAt;
+        private Timestamp createdAt;
+
+        public UpdateInfoDTO(User userPS) {
+            this.id = userPS.getId();
+            this.username = userPS.getUsername();
+            this.nick = userPS.getNick();
+            this.password = userPS.getPassword();
+            this.email = userPS.getEmail();
+            this.phone = userPS.getPhone();
+            this.profile = userPS.getProfile();
+            this.modifiedAt = userPS.getModifiedAt();
+            this.createdAt = userPS.getCreatedAt();
+        }
+    }
+
+    @Data
+    public static class UsernameDupCheckDTO {
+        private String username;
+
+        public UsernameDupCheckDTO(String username) {
+            this.username = username;
+        }
+    }
+
+    @Data
+    public static class NickDupCheckDTO {
+        private String nick;
+
+        public NickDupCheckDTO(String nick) {
+            this.nick = nick;
+        }
+    }
+
+    @Data
+    public static class UpdateNickDTO {
+        private String nick;
+        private Long userId;
+
+        public UpdateNickDTO(User userPS) {
+            this.userId = userPS.getId();
+            this.nick = userPS.getNick();
+        }
+    }
+
+
     // 조회
     @Data
     public static class CheckResponse { // 조회
@@ -55,4 +111,6 @@ public class UserResponse {
             this.phone = phone;
         }
     }
+
+
 }

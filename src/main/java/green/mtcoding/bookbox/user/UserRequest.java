@@ -41,6 +41,28 @@ public class UserRequest {
         @NotEmpty
         private String password;
     }
+    
+    //회원 정보 수정 요청
+    @Data
+    public static class UpdateUserDTO {
+
+        @NotEmpty
+        private String password;
+        @Pattern(regexp = "^[\\w._%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$", message = "이메일 형식으로 작성해주세요")
+        @NotEmpty
+        private String email;
+        @NotEmpty
+        private String phone;
+        @NotEmpty
+        private String nick;
+
+    }
+
+    @Data
+    public static class UpdateNickDTO {
+        @NotEmpty
+        private String nick;
+    }
 
     // TODO: 유저의 기본 정보와 필요 데이터 응답을 위해 생성 - 신민재
     @Data

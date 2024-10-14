@@ -53,7 +53,6 @@ public class User {
     private List<Reservation> reservations = new ArrayList<>();
 
     @Builder
-
     public User(Long id, String username, String nick, String password, String phone, String email, Timestamp createdAt, Timestamp modifiedAt, String profile) {
         this.id = id;
         this.username = username;
