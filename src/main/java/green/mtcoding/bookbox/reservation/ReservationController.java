@@ -40,6 +40,6 @@ public class ReservationController {
     @PutMapping("/api/books/reservation-cncl/{isbn13}")
     public ResponseEntity<?> cancelReservation(@PathVariable String isbn13, @RequestParam Long userId) {
         reservationService.예약취소(userId, isbn13);
-        return ResponseEntity.ok(Resp.ok("에약이 취소되었습니다."));
+        return ResponseEntity.ok(Resp.ok("예약이 취소되었습니다."));
     }
 }

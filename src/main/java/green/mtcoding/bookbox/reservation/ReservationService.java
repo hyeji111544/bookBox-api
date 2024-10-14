@@ -10,18 +10,23 @@ import green.mtcoding.bookbox.lend.LendRepository;
 import green.mtcoding.bookbox.user.User;
 import green.mtcoding.bookbox.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ReservationService {
+
     private final ReservationRepository reservationRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
@@ -76,10 +81,16 @@ public class ReservationService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
         Book book = bookRepository.findByIsbn13(isbn13).orElseThrow(() -> new ExceptionApi400("도서정보를 찾을 수 없습니다."));
 
-        // 예약 정보 찾기 및 취소
+        // 예약 정보 찾기 및 취소 (취소되지 않은 예약 정보만 조회)
         Reservation reservation = reservationRepository.findByUserAndBookAndCancelDateIsNull(user, book)
                 .orElseThrow(() -> new ExceptionApi400("예약 정보를 찾을 수 없습니다."));
 
+        // 이미 취소된 예약에 대한 예외 발생
+        if (reservation.getCancelDate() != null) {
+            throw new ExceptionApi400("이미 취소된 예약건입니다.");
+        }
+
+        // 예약 취소 날짜 설정
         reservation.setCancelDate(Timestamp.valueOf(LocalDateTime.now()));
         reservationRepository.save(reservation);
 
