@@ -14,19 +14,15 @@ public interface BookRepository extends JpaRepository<Book, String> {
     @Query("SELECT b FROM Book b WHERE b.title LIKE %:searchTerm% OR b.author LIKE %:searchTerm% OR b.publisher LIKE %:searchTerm%")
     List<Book> mFindAll(@Param("searchTerm") String searchTerm);
     //메인에 보일 것
-    @Query("select b from Book b left join fetch b.category c")
-    List<Book> mFindAllWithCategory();
-    //메인에 보일 것 테스트
-    @Query("select b from Book b left join fetch b.category c")
-    List<Category> mFindAllWithCategoryV2();
+//    @Query("select b from Book b left join fetch b.category c")
+//    List<Book> mFindAllWithCategory();
+    //메인에 보일 것
+    @Query("select b from Category b left join fetch b.books c")
+    List<Category> mFindAllWithCategory();
 
     //카테고리 누르면 해당 책들 나올 수 있게 만들기
     @Query("select b from Book b where b.category.id =:id")
     List<Book> mFindByCategoryId(@Param("id") String id);
-
-
-
-
 
 
     // 대여 상태인지 확인

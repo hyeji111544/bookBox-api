@@ -23,23 +23,26 @@ public class BookRepositoryTest {
         String publisher = "";
     }
 
-    @Test
-    public void mFindAllWithCategory_test(){
-        List<Book> books = bookRepository.mFindAllWithCategory();
-        System.out.println(books.get(0).getCategory());
-    }
-    @Test
-    public void mFindAllWithCategoryV2_test(){
-        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
-        System.out.println(categories.size());
-    }
+//    @Test
+//    public void mFindAllWithCategory_test(){
+//        List<Book> books = bookRepository.mFindAllWithCategory();
+//        System.out.println(books.get(0).getCategory());
+//    }
+//    @Test
+//    public void mFindAllWithCategoryV2_test(){
+//        List<Category> categories = bookRepository.mFindAllWithCategoryV2();
+//        System.out.println(categories.size());
+//    }
+//
+//    @Test
+//    public void mFindByCategoryId_test(){
+//        String id = "170";
+//        //Optional<Book> book = bookRepository.mFindByCategoryId(id);
+//        //System.out.println(book.isPresent());
+//        List<Book> books = bookRepository.mFindAllWithCategory();
+//        System.out.println(books.get(0).getCategory());
+//    }
 
-    @Test
-    public void mFindByCategoryId_test(){
-        String id = "170";
-        //Optional<Book> book = bookRepository.mFindByCategoryId(id);
-        //System.out.println(book.isPresent());
-    }
 
 
     // 대여 상태인지 확인
@@ -48,10 +51,10 @@ public void mCheckLendStatus_test(){
 
         //given
         String isbn13 = "9791187011590";
-        
+
         //when
         Boolean b = bookRepository.mCheckLendStatus(isbn13).orElseThrow(() -> new ExceptionApi404("요청하신 도서가 존재하지 않습니다."));
-    
+
         //eye
         System.out.println(b);
         if(b.booleanValue()){
@@ -97,5 +100,6 @@ public void mCheckLendStatus_test(){
             throw new ExceptionApi500("반납 처리중 문제발생");
         }
     }
+
 
 }
