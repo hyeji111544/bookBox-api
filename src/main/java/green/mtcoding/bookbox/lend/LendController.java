@@ -27,7 +27,7 @@ public class LendController {
     }
 
     // 반납하기
-    // TODO: 다음 예약자에게 자동으로 넘어가도록 처리
+    // TODO: 다음 예약자에게 자동으로 넘어가도록 처리 - 민재씨가 추가완료함
     @PutMapping("/api/lends/return")
     public ResponseEntity<?>  lendReturn(@RequestHeader("Authorization") String token, @RequestBody LendRequest.ReturnDTO request){
         String jwtToken = token.replace("Bearer ", "");
@@ -38,7 +38,15 @@ public class LendController {
         return ResponseEntity.ok(Resp.ok(result, "성공적으로 반납되었습니다."));
     }
 
+    //TODO: 테스트용 컨트롤러 (지우기)
+    // 자동반납 테스트
+/*    @PutMapping("/lends/auto-return")
+    public ResponseEntity<?> lendAutoReturn(){
 
+        LendResponse.AutoReturnDTO result = lendService.자동반납();
+
+        return ResponseEntity.ok(Resp.ok(result));
+    }*/
 
     // 현재 대여중인 도서 목록
     @GetMapping("/api/lends/list")

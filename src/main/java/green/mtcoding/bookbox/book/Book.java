@@ -3,6 +3,7 @@ package green.mtcoding.bookbox.book;
 import green.mtcoding.bookbox.category.Category;
 import green.mtcoding.bookbox.comment.Comment;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -68,5 +69,22 @@ public class Book {
         this.category = category; // 카테고리 업데이트
     }
 
-
+    @Builder
+    public Book(String isbn13, String title, String author, String publisher, String description, Integer itemId, String cover, String pubDate, boolean lendStatus, boolean adult, String link, boolean reservationStatus, int lendCount, int reservationCount, Category category) {
+        this.isbn13 = isbn13;
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.description = description;
+        this.itemId = itemId;
+        this.cover = cover;
+        this.pubDate = pubDate;
+        this.lendStatus = lendStatus;
+        this.adult = adult;
+        this.link = link;
+        this.reservationStatus = reservationStatus;
+        this.lendCount = lendCount;
+        this.reservationCount = reservationCount;
+        this.category = category;
+    }
 }

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 @Entity
 @NoArgsConstructor
 @Getter
+@Setter
 @Table(name = "lend_tb")
 public class Lend {
 
@@ -50,6 +52,17 @@ public class Lend {
         this.returnDate = returnDate;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public void setLendDate(Timestamp lendDate) {
+        this.lendDate = lendDate;
+    }
     @Builder
     public Lend(Long id, Timestamp lendDate, Timestamp returnDate, boolean returnStatus, boolean extendStatus, User user, Book book) {
         this.id = id;
@@ -61,11 +74,4 @@ public class Lend {
         this.book = book;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
 }

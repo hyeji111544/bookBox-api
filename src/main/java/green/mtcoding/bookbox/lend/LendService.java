@@ -96,33 +96,66 @@ public class LendService {
         }
 
 
-
         // 4. 반납정보 return
-        Lend lendPS = lendRepository.mFindLend(userId, request.getIsbn13());
+        Lend lendPS = lendRepository.findLatestReturnedLendNative(userId, request.getIsbn13())
+                .orElseThrow(() -> new ExceptionApi404("반납된 기록을 찾을 수 없습니다."));
 
         return new LendResponse.ReturnDTO(lendPS);
 
     }
 
+    // TODO: 자동 반납 예약 부분 잘 안됨 실행시키지마셈 ㅠ
     // 자동으로 반납시키기 ( 반납일 12시에 자동으로 반납됨 )
     // 스케줄링 설정
-/*
     @Transactional
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-    public void 자동반납(){
+    public void 자동반납() {
 
-        // 반납 날짜가 오늘 날짜인 대여 데이터 검색
+        // 반납 날짜가 오늘인 대여 정보 조회
         List<Lend> lendHistoryPS = lendRepository.mFindAllByReturnDateAndReturnStatusFalse();
+
+        // 반납할 책이 없으면 종료
+        if (lendHistoryPS.isEmpty()) {
+            return;
+        }
 
         // 반납 처리
         for (Lend lend : lendHistoryPS) {
             lend.setReturnStatus(true); // 반납 상태 업데이트
             lend.setReturnDate(new Timestamp(System.currentTimeMillis())); // 반납일 설정
             lendRepository.save(lend); // 저장
-        }
 
+            // 대여상태=false & 대여 수 -1
+            Book book = lend.getBook();
+            bookRepository.mUpdateLendStatusAndCountReturn(book.getIsbn13());
+
+            // 다음 예약자 있는지 조회 (예약 상태가 true이고 예약수가 1 이상일 경우)
+            // 여러건 조회되어서 터짐 -> 수정
+            List<Book> reservedBook = bookRepository.mFindBookWithActiveReservation(book.getIsbn13());
+
+            // 다음 예약자 대여 실행
+            if (!reservedBook.isEmpty()) {
+                // 예약자 중 reservation_id가 가장 작은 userId 조회
+                // TODO: 예약자 중 sequence가 가장 작은 UserId 조회하는 걸로 수정하기
+                Long userId = reservationRepository.findFirstUserIdByIsbn13(book.getIsbn13());
+
+                // 새로운 대여 처리
+                Lend newLend = new Lend();
+                newLend.setUser(new User(userId));
+                newLend.setBook(book);
+                newLend.setLendDate(new Timestamp(System.currentTimeMillis()));
+                newLend.setReturnStatus(false);
+                lendRepository.save(newLend); // 새로운 대여 정보 저장
+
+                // 예약 테이블에서 해당 예약자 삭제
+                reservationRepository.deleteByUserIdAndIsbn13(userId, book.getIsbn13());
+                // 다음 예약자 있으면 순번 update 해주기
+            }
+        }
     }
-*/
+
+
+
 
 
     public LendResponse.ListDTO 대여중인도서목록조회(Long userId) {
@@ -156,7 +189,7 @@ public class LendService {
 
     // userId로 조회
     // 현재 대여중인 도서 포함
-    public List<LendResponse.HistoryDTO> 지금까지대여한도서들목록(Long userId){
+    public List<LendResponse.HistoryDTO> 지금까지대여한도서들목록(Long userId) {
 
         List<Object[]> objsPS = lendRepository.mFindLendsAndBooksByUserId(userId);
 
@@ -184,7 +217,7 @@ public class LendService {
 
         return historyDTOList;  // 모든 lend에 대한 HistoryDTO 리스트 반환
 
-            // 중복된 책을 제외하기 위해 isbn13을 기준으로 Map에 저장
+        // 중복된 책을 제외하기 위해 isbn13을 기준으로 Map에 저장
             /*if (!uniqueBooks.containsKey(book.getIsbn13())) {
                 uniqueBooks.put(book.getIsbn13(), book);
                 // 중복되지 않은 책과 해당 대여 내역을 기반으로 DTO 생성

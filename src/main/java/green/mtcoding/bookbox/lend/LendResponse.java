@@ -9,7 +9,25 @@ import java.util.List;
 import java.util.Set;
 
 public class LendResponse {
-    
+
+    //TODO: 자동반납 테스트용 (지우기)
+    @Data
+    public static class AutoReturnDTO {
+        private Long lendId;
+        private boolean returnStatus;
+        private Timestamp returnDate;
+
+        public AutoReturnDTO(List<Lend> lendPS) {
+            for(Lend lend : lendPS) {
+                this.lendId = lend.getId();
+                this.returnStatus = lend.isReturnStatus();
+                this.returnDate = lend.getReturnDate();
+            }
+
+        }
+    }
+
+
     // 대여중인 도서목록
     @Data
     public static class ListDTO {

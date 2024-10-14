@@ -35,4 +35,18 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     // 유저별 예약 목록 조회
     List<Reservation> findByUser(User user);
 
+
+
+
+
+    // 예약자 조회 쿼리
+    @Query("select r.user.id from Reservation r where r.book.isbn13 = :isbn13")
+    Long findUserIdByIsbn13(@Param("isbn13") String isbn13);
+
+    @Modifying
+    @Query("delete from Reservation r where r.user.id = :userId and r.book.isbn13 = :isbn13")
+    void deleteByUserIdAndIsbn13(@Param("userId") Long userId, @Param("isbn13") String isbn13);
+
+    @Query("SELECT r.user.id FROM Reservation r WHERE r.book.isbn13 = :isbn13 ORDER BY r.id ASC")
+    Long findFirstUserIdByIsbn13(@Param("isbn13") String isbn13);
 }

@@ -101,5 +101,26 @@ public void mCheckLendStatus_test(){
         }
     }
 
+    @Test
+    public void mFindBookWithActiveReservation_test(){
+        //given
+        String isbn13 = "9788937462849";
+
+        //when
+        List<Book> bookList = bookRepository.mFindBookWithActiveReservation(isbn13);
+
+        //eye
+        if(bookList.isEmpty()){
+            System.out.println("해당 도서는 예약 상태가 아님");
+        } else {
+            System.out.println("해당 도서는 예약 상태입니다.");
+            System.out.println("예약된 도서 수: " + bookList.size());
+            for (Book book : bookList) {
+                System.out.println("도서 제목: " + book.getTitle());
+            }
+        }
+
+
+    }
 
 }

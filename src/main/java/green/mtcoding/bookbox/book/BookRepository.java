@@ -39,9 +39,16 @@ public interface BookRepository extends JpaRepository<Book, String> {
     @Query("UPDATE Book b SET b.lendStatus = false, b.lendCount = b.lendCount - 1 WHERE b.isbn13 = :isbn13")
     Integer mUpdateLendStatusAndCountReturn(@Param("isbn13") String isbn13);
 
+    // 예약 상태인 책 return
+    @Query("select b from Book b where b.isbn13 = :isbn13 and b.reservationStatus = true and b.reservationCount > 0")
+    List<Book> mFindBookWithActiveReservation(@Param("isbn13") String isbn13);
+
+
+
 
     // isbn으로 도서 찾기
     Optional<Book> findByIsbn13(String isbn13);
+
 
 
 }

@@ -52,8 +52,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations = new ArrayList<>();
 
-
-
     @Builder
 
     public User(Long id, String username, String nick, String password, String phone, String email, Timestamp createdAt, Timestamp modifiedAt, String profile) {
@@ -67,4 +65,10 @@ public class User {
         this.modifiedAt = modifiedAt;
         this.profile = profile;
     }
+
+    // 생성자 오버로딩
+    public User(Long id){
+        this.id = id;
+    }
+
 }
