@@ -87,4 +87,13 @@ public class Book {
         this.reservationCount = reservationCount;
         this.category = category;
     }
+
+    public void setLendStatus(boolean lendStatus) {
+        this.lendStatus = lendStatus;
+    }
+
+    public void setLendCount(int lendCount) {
+        this.lendCount = lendCount;
+    }
+
 }

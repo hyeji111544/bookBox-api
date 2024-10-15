@@ -87,7 +87,7 @@ public class LendService {
         }
 
 
-        // TODO: 반납 후 예약자가 있는지 확인하여 처리 - 신민재
+        // 4. 반납 후 예약자가 있는지 확인하여 처리 - TODO: 신민재
         boolean hasReservations = reservationRepository.countCurrentReservations(request.getIsbn13()) > 0;
 
         if (hasReservations) {
@@ -96,7 +96,7 @@ public class LendService {
         }
 
 
-        // 4. 반납정보 return
+        // 5. 반납정보 return
         Lend lendPS = lendRepository.findLatestReturnedLendNative(userId, request.getIsbn13())
                 .orElseThrow(() -> new ExceptionApi404("반납된 기록을 찾을 수 없습니다."));
 
@@ -105,7 +105,7 @@ public class LendService {
     }
 
     // TODO: 자동 반납 예약 부분 잘 안됨 실행시키지마셈 ㅠ
-    // 자동으로 반납시키기 ( 반납일 12시에 자동으로 반납됨 )
+    // 자동으로 반납시키기 ( 반납일 00시에 자동으로 반납됨 )
     // 스케줄링 설정
     @Transactional
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
@@ -125,37 +125,46 @@ public class LendService {
             lend.setReturnDate(new Timestamp(System.currentTimeMillis())); // 반납일 설정
             lendRepository.save(lend); // 저장
 
+            // TODO: 예약자가 있는지 확인 후 자동 대여 처리 -------------- 요기 추가했습니다! -----------------
+            boolean hasReservations = reservationRepository.countCurrentReservations(lend.getBook().getIsbn13()) > 0;
+            if (hasReservations) {
+                reservationService.자동대여(lend.getBook().getIsbn13());
+            }
+
             // 대여상태=false & 대여 수 -1
             Book book = lend.getBook();
             bookRepository.mUpdateLendStatusAndCountReturn(book.getIsbn13());
 
+
+
+            // TODO: 여기 밑의 코드들은 reservationService.자동대여() 에서 이미 처리되므로 없어도 상관없지만 일단은 주석해놨습니다.
+            // TODO: 추후 통합테스트때 비교해보면 될 것 같아요
+
             // TODO: 예약 부분인데 민재씨 마음껏 작성하시오!!!
             // 다음 예약자 있는지 조회 (예약 상태가 true이고 예약수가 1 이상일 경우)
-            List<Book> reservedBook = bookRepository.mFindBookWithActiveReservation(book.getIsbn13());
-
-            // 다음 예약자 대여 실행
-            if (!reservedBook.isEmpty()) {
-                // 예약자 중 reservation_id가 가장 작은 userId 조회
-                // TODO: 예약자 중 sequence가 가장 작은 UserId 조회하는 걸로 수정하기
-                Long userId = reservationRepository.findFirstUserIdByIsbn13(book.getIsbn13());
-
-                // 새로운 대여 처리
-                Lend newLend = new Lend();
-                newLend.setUser(new User(userId));
-                newLend.setBook(book);
-                newLend.setLendDate(new Timestamp(System.currentTimeMillis()));
-                newLend.setReturnStatus(false);
-                lendRepository.save(newLend); // 새로운 대여 정보 저장
-
-                // 예약 테이블에서 해당 예약자 삭제
-                reservationRepository.deleteByUserIdAndIsbn13(userId, book.getIsbn13());
-                // 다음 예약자 있으면 순번 update 해주기
-
-            }
+//            List<Book> reservedBook = bookRepository.mFindBookWithActiveReservation(book.getIsbn13());
+//
+//            // 다음 예약자 대여 실행
+//            if (!reservedBook.isEmpty()) {
+//                // 예약자 중 reservation_id가 가장 작은 userId 조회
+//                // TODO: 예약자 중 sequence가 가장 작은 UserId 조회하는 걸로 수정하기
+//                Long userId = reservationRepository.findFirstUserIdByIsbn13(book.getIsbn13());
+//
+//                // 새로운 대여 처리
+//                Lend newLend = new Lend();
+//                newLend.setUser(new User(userId));
+//                newLend.setBook(book);
+//                newLend.setLendDate(new Timestamp(System.currentTimeMillis()));
+//                newLend.setReturnStatus(false);
+//                lendRepository.save(newLend); // 새로운 대여 정보 저장
+//
+//                // 예약 테이블에서 해당 예약자 삭제
+//                reservationRepository.deleteByUserIdAndIsbn13(userId, book.getIsbn13());
+//                // 다음 예약자 있으면 순번 update 해주기
+//
+//            }
         }
     }
-
-
 
 
 

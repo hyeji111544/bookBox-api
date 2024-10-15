@@ -11,7 +11,6 @@ import green.mtcoding.bookbox.user.User;
 import green.mtcoding.bookbox.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,8 +40,9 @@ public class ReservationService {
 
         // 도서 대여 상태 확인
         Book book = bookRepository.findById(isbn13).orElseThrow(() -> new ExceptionApi404("해당 도서를 찾을 수 없습니다."));
-        if (book.isLendStatus()) {  // true면 도서가 반납된 상태로 예약 불가능
-            throw new ExceptionApi400("이 도서는 대여 가능한 상태라서 예약이 불가능합니다.");
+        // 책이 대여중이지 않은 상태일 때 예약 가능
+        if (!book.isLendStatus()) {  // lendStatus가 false일때 예약 가능
+            throw new ExceptionApi400("이 도서는 현재 대여 가능한 상태라 예약이 불가능합니다.");
         }
 
         // 예약 중복 확인 (해당 유저가 이미 예약한 도서인지 체크)
@@ -76,6 +76,7 @@ public class ReservationService {
 
 
     // 예약 취소
+    @Transactional
     public void 예약취소(Long userId, String isbn13) {
         // 유저와 도서 정보 로드
         User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
@@ -116,6 +117,7 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
+
     // 반납 시 자동 대여 로직
     @Transactional
     public void 자동대여(String isbn13) {
@@ -126,10 +128,16 @@ public class ReservationService {
                 .orElse(null);
 
         if (firstReservation != null) {
-            // 대여 처리
+            // 예약자에게 대여 처리
             Lend newLend = new Lend();
             newLend.setUser(firstReservation.getUser());
             newLend.setBook(firstReservation.getBook());
+
+            // 대여 날짜를 현재 시간으로 설정
+            newLend.setLendDate(Timestamp.valueOf(LocalDateTime.now()));
+            newLend.setReturnDate(Timestamp.valueOf(LocalDateTime.now().plusDays(7)));
+            newLend.setReturnStatus(false); // 대여중 상태
+
             lendRepository.save(newLend);
 
             // 예약 정보 삭제
@@ -137,6 +145,12 @@ public class ReservationService {
 
             // 예약 순번 업데이트
             reservationRepository.updateReservationSequences(isbn13, firstReservation.getSequence());
+
+            // 도서의 대여 상태 & 대여 카운트 업데이트
+            Book book = firstReservation.getBook();
+            book.setLendStatus(true); // 대여중 상태로 변경
+            book.setLendCount(1);
+            bookRepository.save(book);
         }
     }
 

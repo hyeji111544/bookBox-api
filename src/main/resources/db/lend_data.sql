@@ -20,3 +20,6 @@ INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, 
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date) VALUES (3, '9791161373355', now(), false, false, DATEADD(day, 7, now()));
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date) VALUES (3, '9788932473901', now(), false, false, now());
 
+
+-- 대여기간 만료로 인한 자동반납 테스트용 데이터
+update lend_tb set return_date = CURRENT_DATE where user_id = 4;
