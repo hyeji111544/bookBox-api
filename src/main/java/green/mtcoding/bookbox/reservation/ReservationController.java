@@ -15,7 +15,7 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     // 도서 예약
-    @PostMapping("/api/books/reservation/{isbn13}")
+    @PostMapping("/api/reservation/{isbn13}")
     public ResponseEntity<?> reserveBook(
             @RequestHeader("Authorization") String token,
             @PathVariable String isbn13) {
@@ -31,13 +31,13 @@ public class ReservationController {
 
 
     // 예약 목록 조회
-    @GetMapping("/api/books/reservation-list")
+    @GetMapping("/api/reservation-list")
     public ResponseEntity<List<ReservationResponse.ReservationDTO>> getReservationList(@RequestParam Long userId) {
         List<ReservationResponse.ReservationDTO> reservations = reservationService.예약목록조회(userId);
         return ResponseEntity.ok(reservations);
     }
 
-    @PutMapping("/api/books/reservation-cncl/{isbn13}")
+    @PutMapping("/api/reservation-cncl/{isbn13}")
     public ResponseEntity<?> cancelReservation(@PathVariable String isbn13, @RequestParam Long userId) {
         reservationService.예약취소(userId, isbn13);
         return ResponseEntity.ok(Resp.ok("예약이 취소되었습니다."));
