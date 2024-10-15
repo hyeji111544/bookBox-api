@@ -27,6 +27,15 @@ public class UserResponse {
         }
     }
 
+    // 자동 로그인
+    record AutoLoginDTO(Long id, String username) {
+        AutoLoginDTO(User user) {
+            this(user.getId(), user.getUsername());
+        }
+    }
+
+
+
     // 로그인
     @Data
     public static class LoginDTO {

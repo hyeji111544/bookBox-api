@@ -2,6 +2,7 @@ package green.mtcoding.bookbox.user;
 
 
 import green.mtcoding.bookbox.core.util.Resp;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+
+    //자동 로그인
+    @PostMapping("/auto/login")
+    public ResponseEntity<?> autoLogin(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        UserResponse.AutoLoginDTO responseDTO = userService.자동로그인(accessToken);
+        return ResponseEntity.ok(Resp.ok(responseDTO));
+    }
 
     // 로그인
     @PostMapping("/login")

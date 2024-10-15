@@ -1,14 +1,14 @@
 package green.mtcoding.bookbox.user;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi401;
-import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.util.JwtUtil;
-import green.mtcoding.bookbox.core.util.MyFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -36,6 +36,25 @@ public class UserService {
 
         return new UserResponse.JoinDTO(userPS);
     }
+
+    // 자동 로그인. 토큰을 돌려줄 필요가 없다.
+    public UserResponse.AutoLoginDTO 자동로그인(String accessToken) {
+        Optional.ofNullable(accessToken).orElseThrow(() -> new ExceptionApi401("토큰을 찾을 수 없습니다."));
+        try {
+            User user = JwtUtil.verify(accessToken);
+            //존재하는 회원인지 확인. id를 꺼내서 존재하는 회원인지 확인
+            User userPS = userRepository.findById(user.getId()).orElseThrow(
+                    ()-> new ExceptionApi401("유저네임을 찾을 수 없습니다")
+            );
+            return new UserResponse.AutoLoginDTO(userPS);
+        }catch (SignatureVerificationException | JWTDecodeException e1) {
+            throw new ExceptionApi401("유효한 토큰이 아닙니다.");
+        } catch (TokenExpiredException e2){
+            throw new ExceptionApi401(("토큰이 만료되었습니다."));
+        }
+    }
+
+
 
 
 
