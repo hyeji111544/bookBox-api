@@ -76,6 +76,7 @@ public class ReservationService {
 
 
     // 예약 취소
+    @Transactional
     public void 예약취소(Long userId, String isbn13) {
         // 유저와 도서 정보 로드
         User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
@@ -127,7 +128,7 @@ public class ReservationService {
                 .orElse(null);
 
         if (firstReservation != null) {
-            // 대여 처리
+            // 예약자에게 대여 처리
             Lend newLend = new Lend();
             newLend.setUser(firstReservation.getUser());
             newLend.setBook(firstReservation.getBook());
@@ -135,6 +136,7 @@ public class ReservationService {
             // 대여 날짜를 현재 시간으로 설정
             newLend.setLendDate(Timestamp.valueOf(LocalDateTime.now()));
             newLend.setReturnDate(Timestamp.valueOf(LocalDateTime.now().plusDays(7)));
+            newLend.setReturnStatus(false); // 대여중 상태
 
             lendRepository.save(newLend);
 
