@@ -14,6 +14,8 @@ public class JwtUtil {
 
     private static final String SECRET_KEY = "bookbox";  // 비밀 키 설정
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
+    private static final long TEST_TIME = 1000 * 60 * 5;  // 5분
+
 
 
     // =================== User ============================
@@ -21,7 +23,7 @@ public class JwtUtil {
     public static String createUserToken(User user) {
         String accessToken = JWT.create()
                 .withSubject("auth") // 이름
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) //만료시간 7일
+                .withExpiresAt(new Date(System.currentTimeMillis() + TEST_TIME)) //만료시간 7일 -> 테스트겸 5분으로 해둠
                 .withClaim("id", user.getId()) // payload에 추가. 개인정보 넣지 않고 검증을 위한 id정도만(인조키 id번호)
                 .withClaim("role", "USER") // 역할: 사용자
                 .sign(Algorithm.HMAC512(SECRET_KEY)); //우리가 암호화 하고 우리가 복호화 해서 확인할 것이므로 대칭키 사용
