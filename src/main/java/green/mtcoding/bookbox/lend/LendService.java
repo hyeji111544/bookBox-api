@@ -129,8 +129,8 @@ public class LendService {
             Book book = lend.getBook();
             bookRepository.mUpdateLendStatusAndCountReturn(book.getIsbn13());
 
+            // TODO: 예약 부분인데 민재씨 마음껏 작성하시오!!!
             // 다음 예약자 있는지 조회 (예약 상태가 true이고 예약수가 1 이상일 경우)
-            // 여러건 조회되어서 터짐 -> 수정
             List<Book> reservedBook = bookRepository.mFindBookWithActiveReservation(book.getIsbn13());
 
             // 다음 예약자 대여 실행
@@ -150,6 +150,7 @@ public class LendService {
                 // 예약 테이블에서 해당 예약자 삭제
                 reservationRepository.deleteByUserIdAndIsbn13(userId, book.getIsbn13());
                 // 다음 예약자 있으면 순번 update 해주기
+
             }
         }
     }

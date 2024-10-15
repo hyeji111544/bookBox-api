@@ -129,8 +129,8 @@ public class LendRepositoryTest {
 
         //eye
         for (Lend lend : lends) {
-            System.out.println(lend.isReturnStatus());
-            System.out.println(lend.getBook().getTitle());
+            System.out.println("returnStatus : " + lend.isReturnStatus());
+            System.out.println("대여한 책 : " + lend.getBook().getTitle());
         }
 
     }
