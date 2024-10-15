@@ -1,5 +1,6 @@
 package green.mtcoding.bookbox.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ public class UserResponse {
     public static class JoinDTO {
         private Long id;
         private String username;
+        private String nick;
         private String email;
         private String phone;
         private String profile;
@@ -18,6 +20,7 @@ public class UserResponse {
         public JoinDTO(User user) {
             this.id = user.getId();
             this.username = user.getUsername();
+            this.nick = user.getNick();
             this.email = user.getEmail();
             this.phone = user.getPhone();
             this.profile = user.getProfile();
@@ -29,6 +32,7 @@ public class UserResponse {
     public static class LoginDTO {
         private Long id;
         private String username;
+        @JsonIgnore
         private String accessToken;
 
         @Builder
