@@ -40,7 +40,7 @@ public class AdminController {
         // JWT 토큰을 헤더에 포함시켜서 응답
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + accessToken)
-                .body(Resp.ok("성공적으로 로그인 되었습니다."));
+                .body(Resp.ok(result, "성공적으로 로그인 되었습니다."));
     }
 
     // 로그아웃
@@ -77,7 +77,7 @@ public class AdminController {
     }
 
     // 도서 수정
-    @PutMapping("/api/admins/{isbn13}")
+    @PutMapping("/api/admins/{isbn13}/update")
     public ResponseEntity<?> updateBook(@PathVariable String isbn13, @RequestBody BookRequest.UpdateDTO updateDTO) {
         BookResponse.BookDetailDTO updateBook = bookService.도서업데이트(isbn13, updateDTO);
         return ResponseEntity.ok(Resp.ok(updateBook));

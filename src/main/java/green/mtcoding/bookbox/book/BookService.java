@@ -162,7 +162,9 @@ public class BookService {
         return new BookResponse.BookDetailDTO(book);
     }
 
-    // 도서 삭제
+
+    // TODO: 현재는 시간 상 도서 "등록" & "수정"만 진행
+    // 도서 삭제 -> 삭제 전 해당 도서에 대한 대여&예약건 조회 필요
     public void deleteBook(String isbn13) {
         bookRepository.deleteById(isbn13);
     }
