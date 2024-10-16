@@ -58,7 +58,9 @@ public class BookController {
     //책 상세보기
     @GetMapping("/api/books/detail")
     public ResponseEntity<?> detail(@RequestParam(name = "isbn13") String isbn13, HttpServletRequest request){
+        System.out.println("상세보기 컨트롤러 1");
         BookResponse.DetailDTO bookDetail = bookService.책상세보기(isbn13,request);
+        System.out.println("상세보기 컨트롤러 2");
         return ResponseEntity.ok(Resp.ok(bookDetail));
     }
 
