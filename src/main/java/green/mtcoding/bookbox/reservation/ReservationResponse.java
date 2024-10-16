@@ -1,5 +1,6 @@
 package green.mtcoding.bookbox.reservation;
 
+import green.mtcoding.bookbox.book.Book;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -21,6 +22,25 @@ public class ReservationResponse {
             this.reservationDate = reservation.getReservationDate();
             this.sequence = reservation.getSequence();
 
+        }
+    }
+
+
+
+    @Data
+    public static class ReservationListDTO {
+        private String isbn13;
+        private String cover;
+        private String bookTitle;
+        private LocalDateTime reservationDate;
+        private int sequence;
+
+        public ReservationListDTO(Book book, LocalDateTime reservationDate, int sequence) {
+            this.bookTitle = book.getTitle();
+            this.isbn13 = book.getIsbn13();
+            this.cover = book.getCover();
+            this.reservationDate = reservationDate;
+            this.sequence = sequence;
         }
     }
 }

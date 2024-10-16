@@ -32,8 +32,13 @@ public class ReservationController {
 
     // 예약 목록 조회
     @GetMapping("/api/reservation-list")
-    public ResponseEntity<List<ReservationResponse.ReservationDTO>> getReservationList(@RequestParam Long userId) {
-        List<ReservationResponse.ReservationDTO> reservations = reservationService.예약목록조회(userId);
+    public ResponseEntity<List<ReservationResponse.ReservationListDTO>> getReservationList(
+            @RequestHeader("Authorization")String token) {
+    // JWT 토큰에서 유저 ID 추출
+    String jwtToken = token.replace("Bearer ", "");
+    Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+
+        List<ReservationResponse.ReservationListDTO> reservations = reservationService.예약목록조회(userId);
         return ResponseEntity.ok(reservations);
     }
 
