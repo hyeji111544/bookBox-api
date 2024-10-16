@@ -11,6 +11,33 @@ import java.util.List;
 public class BookResponse {
 
     @Data
+    public static class CateTabDTO{
+        private List<CateDTO> cates = new ArrayList<>();
+        private List<BookListDTO> books = new ArrayList<>();
+
+        public CateTabDTO(List<Category> cateList, List<Book> bookList) {
+            for (Category cate : cateList) {
+                this.cates.add(new CateDTO(cate));
+            }
+            for(Book book : bookList) {
+                this.books.add(new BookListDTO(book));
+            }
+        }
+    }
+
+    @Data
+    public static class CateDTO{
+        private String id;
+        private String name;
+
+        public CateDTO(Category category) {
+            this.id = category.getId();
+            this.name = category.getName();
+        }
+    }
+
+
+    @Data
     public static class BookSearchDTO {
         private String isbn13;
         private String title;
@@ -36,6 +63,7 @@ public class BookResponse {
         private String title;
         private String author;
         private String publisher;
+        private String description;
         private String cover;
         private String categoryId;
 
@@ -44,6 +72,7 @@ public class BookResponse {
             this.title = book.getTitle();
             this.author = book.getAuthor();
             this.publisher = book.getPublisher();
+            this.description = book.getDescription();
             this.cover = book.getCover();
             this.categoryId = book.getCategory().getId();
         }
@@ -90,6 +119,7 @@ public class BookResponse {
         private String isbn13;
         private String title;
         private String author;
+        private String description;
         private String cover;
 
 
@@ -97,6 +127,7 @@ public class BookResponse {
             this.isbn13 = book.getIsbn13();
             this.title = book.getTitle();
             this.author = book.getAuthor();
+            this.description = book.getDescription();
             this.cover = book.getCover();
         }
     }
