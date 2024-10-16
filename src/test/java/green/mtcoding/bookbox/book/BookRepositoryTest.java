@@ -1,12 +1,15 @@
 package green.mtcoding.bookbox.book;
 
 import green.mtcoding.bookbox.category.Category;
+import green.mtcoding.bookbox.comment.Comment;
+import green.mtcoding.bookbox.comment.CommentRepository;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi500;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,8 @@ public class BookRepositoryTest {
 
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Test
     public void mFindAll_test() {
@@ -51,6 +56,21 @@ public class BookRepositoryTest {
         //2번 들락날락은 별로라고 했는데 그럼 join할까?
         System.out.println(detailBook.getComments().get(0).getContent());
         System.out.println(detailBook.getComments().get(0).getUser().getNick());
+    }
+
+    @Test
+    public void mFindByIdWithComments_test(){
+        String isbn13 = "9791190669313";
+        System.out.println("1");
+        List<Comment> comment = commentRepository.mFindCommentsByBookIsbn13(isbn13);
+        System.out.println("2");
+        List<BookResponse.CommentOnlyDTO> dtos = new ArrayList<>();
+        for (Comment comment1 : comment) {
+            BookResponse.CommentOnlyDTO dto = new BookResponse.CommentOnlyDTO(comment1,1L);
+            dtos.add(dto);
+            System.out.println(dto.getId());
+            System.out.println(dto.getNick());
+        }
     }
 
 

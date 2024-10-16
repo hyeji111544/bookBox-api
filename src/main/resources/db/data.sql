@@ -20,9 +20,6 @@ VALUES
 
 
 
-
-
-
 INSERT INTO category_tb (category_id, category_name) VALUES (112011, '소설');
 INSERT INTO category_tb (category_id, category_name) VALUES (170, '경제경영');
 INSERT INTO category_tb (category_id, category_name) VALUES (336, '자기계발');

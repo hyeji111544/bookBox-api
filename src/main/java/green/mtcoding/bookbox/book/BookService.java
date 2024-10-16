@@ -2,12 +2,15 @@ package green.mtcoding.bookbox.book;
 
 import green.mtcoding.bookbox.category.Category;
 import green.mtcoding.bookbox.category.CategoryRepository;
+import green.mtcoding.bookbox.comment.Comment;
+import green.mtcoding.bookbox.comment.CommentRepository;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi404;
 import green.mtcoding.bookbox.core.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -15,12 +18,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
 
 
 
@@ -73,6 +77,8 @@ public class BookService {
 
 
 
+
+
     public BookResponse.DetailDTO 책상세보기(String isbn13, HttpServletRequest request){
         Book bookPS = bookRepository.mFindByIdWithComment(isbn13)
                 .orElseThrow(()-> new ExceptionApi404("해당 책이 없습니다"));
@@ -85,6 +91,27 @@ public class BookService {
         Long userId = JwtUtil.extractUserIdFromToken(token);
         return new BookResponse.DetailDTO(bookPS,userId);
     }
+    public BookResponse.DetailOnlyDTO 책만상세보기(String isbn13){
+        Book bookPS = bookRepository.mFindByIsbn13(isbn13)
+                .orElseThrow(() -> new ExceptionApi404("해당 책이 없습니다."));
+        return new BookResponse.DetailOnlyDTO(bookPS);
+    }
+
+    public List<BookResponse.CommentOnlyDTO> 댓글만상세보기(String isbn13, HttpServletRequest request){
+        String token = JwtUtil.extractToken(request);
+        System.out.println("1");
+        Long userId = JwtUtil.extractUserIdFromToken(token);
+        List<Comment> commentPS = commentRepository.mFindCommentsByBookIsbn13(isbn13);
+        System.out.println("2");
+        List<BookResponse.CommentOnlyDTO> dtos = new ArrayList<>();
+        System.out.println("3");
+        for(Comment comment : commentPS){
+            BookResponse.CommentOnlyDTO dto = new BookResponse.CommentOnlyDTO(comment,userId);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
 
 
     public BookResponse.CateTabDTO 카테탭(){

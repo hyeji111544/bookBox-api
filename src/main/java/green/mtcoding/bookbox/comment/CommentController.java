@@ -21,4 +21,6 @@ public class CommentController {
         commentService.리뷰삭제(id,request);
         return ResponseEntity.ok(Resp.ok(null));
     }
+
+
 }

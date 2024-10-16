@@ -61,4 +61,22 @@ public class BookController {
         BookResponse.DetailDTO bookDetail = bookService.책상세보기(isbn13,request);
         return ResponseEntity.ok(Resp.ok(bookDetail));
     }
+
+    //책만 상세보기
+    @GetMapping("/api/books/detail-onlybook")
+    public ResponseEntity<?> detailBook(@RequestParam(name = "isbn13") String isbn13){
+        BookResponse.DetailOnlyDTO bookDetail = bookService.책만상세보기(isbn13);
+        return ResponseEntity.ok(Resp.ok(bookDetail));
+    }
+
+    //책만 상세보기
+    @GetMapping("/api/books/detail-onlybookcomment")
+    public ResponseEntity<?> detailComment(@RequestParam(name = "isbn13") String isbn13, HttpServletRequest request){
+        List<BookResponse.CommentOnlyDTO> bookDetail = bookService.댓글만상세보기(isbn13,request);
+        System.out.println("5");
+        return ResponseEntity.ok(Resp.ok(bookDetail));
+    }
+
+
+
 }
