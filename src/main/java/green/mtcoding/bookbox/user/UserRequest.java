@@ -41,22 +41,4 @@ public class UserRequest {
         private String password;
     }
 
-    // TODO: 유저의 기본 정보와 필요 데이터 응답을 위해 생성 - 신민재
-    @Data
-    public static class UserDTO {
-        private Long id;
-        private String username;
-        private String email;
-        private String phone;
-
-
-        // 매개변수로 받음
-        public UserDTO(User user) {
-            this.id = user.getId();
-            this.username = user.getUsername();
-            this.email = user.getEmail();
-            this.phone = user.getPhone();
-        }
-    }
-
 }

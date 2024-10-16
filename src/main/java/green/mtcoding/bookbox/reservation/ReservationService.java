@@ -65,11 +65,7 @@ public class ReservationService {
 
         reservationRepository.save(reservation);
 
-        return new ReservationResponse.ReservationDTO (
-            reservation.getBook().getTitle(),
-            reservation.getReservationDate().toLocalDateTime(),
-            reservation.getSequence()
-        );
+        return new ReservationResponse.ReservationDTO(reservation);
 
     }
 
@@ -108,11 +104,7 @@ public class ReservationService {
         User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
         List<Reservation> reservations = reservationRepository.findByUser(user);
         return reservations.stream()
-                .map(reservation -> new ReservationResponse.ReservationDTO(
-                        reservation.getBook().getTitle(),
-                        reservation.getReservationDate().toLocalDateTime(),
-                        reservation.getSequence()
-                ))
+                .map(reservation -> new ReservationResponse.ReservationDTO(reservation))
                 .collect(Collectors.toList());
     }
 

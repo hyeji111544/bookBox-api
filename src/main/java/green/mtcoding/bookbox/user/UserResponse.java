@@ -1,6 +1,8 @@
 package green.mtcoding.bookbox.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import green.mtcoding.bookbox.lend.LendResponse;
+import green.mtcoding.bookbox.reservation.ReservationResponse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -49,6 +51,31 @@ public class UserResponse {
             this.accessToken = accessToken;
         }
     }
+
+
+    // TODO: 유저의 기본 정보와 필요 데이터 응답을 위해 생성 - 신민재
+    // 대여, 예약 목록 추가
+    @Data
+    public static class UserDTO {
+        private Long id;
+        private String username;
+        private String nick;
+        private String email;
+        private String phone;
+        private List<LendResponse.LendDTO> lends;
+        private List<ReservationResponse.ReservationDTO> reservations;
+
+        public UserDTO(User user) {
+            this.id = user.getId();
+            this.username = user.getUsername();
+            this.nick = user.getNick();
+            this.email = user.getEmail();
+            this.phone = user.getPhone();
+            this.lends = user.getLends().stream().map(LendResponse.LendDTO::new).collect(Collectors.toList());
+            this.reservations = user.getReservations().stream().map(ReservationResponse.ReservationDTO::new).collect(Collectors.toList());
+        }
+    }
+
 
     // 조회
     @Data
