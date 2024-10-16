@@ -23,13 +23,13 @@ public class AdminController {
 
     // =========================== AUTH ====================================
 
-    // 자동 로그인
-    @PostMapping("/api/admins/auto/login")
-    public ResponseEntity<?> autoLogin(HttpServletRequest request) {
-        String accessToken = request.getHeader("Authorization");
-        AdminResponse.LoginDTO responseDTO = adminService.자동로그인(accessToken);
-        return ResponseEntity.ok(Resp.ok(responseDTO));
-    }
+//    // 자동 로그인
+//    @PostMapping("/api/admins/auto/login")
+//    public ResponseEntity<?> autoLogin(HttpServletRequest request) {
+//        String accessToken = request.getHeader("Authorization");
+//        AdminResponse.LoginDTO responseDTO = adminService.자동로그인(accessToken);
+//        return ResponseEntity.ok(Resp.ok(responseDTO));
+//    }
 
     // 로그인
     @PostMapping("/api/admins/login")
@@ -50,12 +50,22 @@ public class AdminController {
         return ResponseEntity.ok(Resp.ok("로그아웃이 완료되었습니다."));
     }
 
-    // 전체 유저 목록 조회
+    // 전체 유저 목록 조회 (유저 정보만)
     @GetMapping("/api/admins/user-list")
     public ResponseEntity<?> getUserList() {
         List<UserResponse.UserDTO> users = adminService.getUserList();
         return ResponseEntity.ok(Resp.ok(users));
     }
+
+
+    // 특정 유저의 예약 및 대여 목록 조회
+    @GetMapping("/api/admins/user-detail/{id}")
+    public ResponseEntity<?> getUserDetails(@PathVariable Long id) {
+        UserResponse.UserDetailsDTO userDetails = adminService.getUserDetails(id);
+        return ResponseEntity.ok(Resp.ok(userDetails));
+    }
+
+
 
 
     // =========================== BOOK ====================================
