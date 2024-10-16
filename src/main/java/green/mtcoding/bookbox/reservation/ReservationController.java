@@ -46,8 +46,11 @@ public class ReservationController {
 
     // 예약 취소
     @PutMapping("/api/reservation-cncl/{isbn13}")
-    public ResponseEntity<?> cancelReservation(@PathVariable String isbn13, @RequestParam Long userId) {
-        reservationService.예약취소(userId, isbn13);
+    public ResponseEntity<?> cancelReservation(@PathVariable String isbn13,
+                                               @RequestHeader("Authorization") String token) {
+        String jwtToken = token.replace("Bearer ", "");
+        Long tokenUserId = JwtUtil.extractUserIdFromToken(jwtToken);
+        reservationService.예약취소(tokenUserId, isbn13);
         return ResponseEntity.ok(Resp.ok("예약이 취소되었습니다."));
     }
 }
