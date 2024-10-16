@@ -40,7 +40,7 @@ public class AdminController {
         // JWT 토큰을 헤더에 포함시켜서 응답
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + accessToken)
-                .body(Resp.ok("성공적으로 로그인 되었습니다."));
+                .body(Resp.ok(result, "성공적으로 로그인 되었습니다."));
     }
 
     // 로그아웃
