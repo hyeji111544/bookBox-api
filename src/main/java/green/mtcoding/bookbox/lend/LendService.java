@@ -76,7 +76,7 @@ public class LendService {
 
         // 업데이트가 성공했는지 확인 (1이 아니면 실패)
         if (updateCount != 1) {
-            throw new ExceptionApi500("도서 반납 처리 중 문제가 발생했습니다.");
+            throw new ExceptionApi500("book도서 반납 처리 중 문제가 발생했습니다.");
         }
 
         // 3.lend_tb 대여 상태 바꾸기
@@ -84,7 +84,7 @@ public class LendService {
 
         // 업데이트 성공했는지 확인 (1이 아니면 실패)
         if (returnStatus != 1) {
-            throw new ExceptionApi500("도서 반납 처리 중 문제가 발생했습니다.");
+            throw new ExceptionApi500("lend도서 반납 처리 중 문제가 발생했습니다.");
         }
 
 
@@ -105,7 +105,6 @@ public class LendService {
 
     }
 
-    // TODO: 자동 반납 예약 부분 잘 안됨 실행시키지마셈 ㅠ
     // 자동으로 반납시키기 ( 반납일 00시에 자동으로 반납됨 )
     // 스케줄링 설정
     @Transactional
@@ -126,16 +125,15 @@ public class LendService {
             lend.setReturnDate(new Timestamp(System.currentTimeMillis())); // 반납일 설정
             lendRepository.save(lend); // 저장
 
+            // 대여상태=false & 대여 수 -1
+            Book book = lend.getBook();
+            bookRepository.mUpdateLendStatusAndCountReturn(book.getIsbn13());
+
             // TODO: 예약자가 있는지 확인 후 자동 대여 처리 -------------- 요기 추가했습니다! -----------------
             boolean hasReservations = reservationRepository.countCurrentReservations(lend.getBook().getIsbn13()) > 0;
             if (hasReservations) {
                 reservationService.자동대여(lend.getBook().getIsbn13());
             }
-
-            // 대여상태=false & 대여 수 -1
-            Book book = lend.getBook();
-            bookRepository.mUpdateLendStatusAndCountReturn(book.getIsbn13());
-
 
 
             // TODO: 여기 밑의 코드들은 reservationService.자동대여() 에서 이미 처리되므로 없어도 상관없지만 일단은 주석해놨습니다.

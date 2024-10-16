@@ -127,9 +127,12 @@ public class LendRepositoryTest {
         //when
         List<Lend> lends = lendRepository.mFindAllByReturnDateAndReturnStatusFalse();
 
+        System.out.println("Lend 리스트 크기: " + lends.size());
+
         //eye
         for (Lend lend : lends) {
             System.out.println("returnStatus : " + lend.isReturnStatus());
+            System.out.println("returnDate : " + lend.getReturnDate());
             System.out.println("대여한 책 : " + lend.getBook().getTitle());
         }
 
