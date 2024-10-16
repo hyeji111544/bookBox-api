@@ -8,6 +8,7 @@ import green.mtcoding.bookbox.core.exception.api.ExceptionApi500;
 import green.mtcoding.bookbox.reservation.ReservationRepository;
 import green.mtcoding.bookbox.reservation.ReservationService;
 import green.mtcoding.bookbox.user.User;
+import green.mtcoding.bookbox.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -24,11 +25,20 @@ public class LendService {
 
     private final LendRepository lendRepository;
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
     private final ReservationService reservationService;
 
     @Transactional
     public LendResponse.LendDTO 대여하기(Long userId, LendRequest.SaveDTO request) {
+
+        // user가 10권 이상 대여했는지 확인
+        Long lendCount = lendRepository.mFindCountByUserId(userId);
+
+        if(lendCount >= 10) {
+            throw new ExceptionApi400("10권을 초과하여 대여할 수 없습니다.");
+        }
+
         // 1. 해당 isbn의 도서가 있는지 체크 ( 유저는 token에서 꺼낸거니까 체크안함 )
         Book bookPS = bookRepository.findById(request.getIsbn13()).orElseThrow(() -> new ExceptionApi404("요청하신 도서가 존재하지 않습니다."));
         // 2. 누군가 lend 했는지 체크

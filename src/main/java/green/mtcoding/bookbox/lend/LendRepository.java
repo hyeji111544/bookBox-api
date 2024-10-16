@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface LendRepository extends JpaRepository<Lend, Long> {
 
     // 대여중인 도서 목록
-    @Query("select l.book.isbn13, l.book.title, l.book.cover from Lend l Join l.book b where l.user.id = :userId AND l.returnStatus = false") // 조인 패치 유저
+    @Query("select l.book.isbn13, l.book.title, l.book.cover, l.returnDate from Lend l Join l.book b where l.user.id = :userId AND l.returnStatus = false") // 조인 패치 유저
     List<Object[]> mFindBooksByUserId(@Param("userId") Long userId);
 
     // 도서 연장 했는지 확인
@@ -52,4 +52,7 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     @Query(value = "UPDATE lend_tb SET return_status = true, return_date = CURRENT_TIMESTAMP WHERE id = :lendId AND return_status = false", nativeQuery = true)
     Integer mAutoReturnLend(@Param("lendId") Long lendId);
 
+    // 해당 유저가 지금 몇 권 대여한 상태인지 count
+    @Query("select count(l) from Lend l where l.user.id = :userId And l.returnStatus = false")
+    Long mFindCountByUserId(@Param("userId") Long userId);
 }

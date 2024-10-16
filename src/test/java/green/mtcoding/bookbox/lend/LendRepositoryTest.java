@@ -205,4 +205,15 @@ public class LendRepositoryTest {
         assertEquals(userId, latestLend.get().getUser().getId());
         assertEquals(bookId, latestLend.get().getBook().getIsbn13());
     }
+
+    @Test
+    public void mFindCountByUserId_test(){
+        Long userId = 2L;
+
+        Long l = lendRepository.mFindCountByUserId(userId);
+
+        System.out.println(l);
+
+
+    }
 }
