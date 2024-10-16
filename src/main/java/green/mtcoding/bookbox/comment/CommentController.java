@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class CommentController {
-    private final CommentService
-            commentService;
+    private final CommentService commentService;
 
     @PostMapping("/api/books/review")
     public ResponseEntity<?> save(@RequestBody CommentRequest.SaveDTO saveDTO,HttpServletRequest request) {

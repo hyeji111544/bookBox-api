@@ -2,7 +2,6 @@ package green.mtcoding.bookbox.lend;
 
 import green.mtcoding.bookbox.core.util.JwtUtil;
 import green.mtcoding.bookbox.core.util.Resp;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

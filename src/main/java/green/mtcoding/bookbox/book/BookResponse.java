@@ -180,8 +180,10 @@ public class BookResponse {
                 this.createdAt = comment.getCreatedAt();
                 this.nick = comment.getUser().getNick();
                 this.isOwner = false;
-                if(comment.getUser().getId() == currentUserId) {
-                    isOwner = true;
+                if(currentUserId != null) {
+                    if (comment.getUser().getId() == currentUserId) {
+                        isOwner = true;
+                    }
                 }
             }
         }

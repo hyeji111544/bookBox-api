@@ -8,7 +8,6 @@ import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 
-
 import java.util.Date;
 
 public class JwtUtil {

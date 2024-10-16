@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.swing.text.View;
-
 public class UserResponse {
     // 회원가입
     @Data
