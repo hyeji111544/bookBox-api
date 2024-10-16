@@ -61,5 +61,20 @@ public class LikeService {
     
     }
 
+    @Transactional
+    public void 즐겨찾기삭제(Long userId, LikeRequest.DeleteDTO deleteDTO){
+
+        // 조회
+        User userPS = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi401("인증되지 않았습니다."));
+        Book bookPS = bookRepository.findById(deleteDTO.getIsbn13()).orElseThrow(() -> new ExceptionApi404("책 정보를 찾을 수 없습니다."));
+
+        // 즐겨찾기에 있는지 조회
+        Like likePS = likeRepository.mFindByUserIdAndIsbn13(userPS.getId(), bookPS.getIsbn13()).orElseThrow(() -> new ExceptionApi400("즐겨찾기 목록에서 찾을 수 없습니다."));
+
+        //즐겨찾기에서 삭제
+        likeRepository.deleteById(likePS.getId());
+
+    }
+
 
 }

@@ -43,12 +43,8 @@ public interface LendRepository extends JpaRepository<Lend, Long> {
     @Query("SELECT DISTINCT l, l.book FROM Lend l JOIN l.book b WHERE l.user.id = :userId")
     List<Object[]> mFindLendsAndBooksByUserId(@Param("userId") Long userId);
 
-/*    // 자정 기준 반납처리할 도서 조회
-    @Query("SELECT l FROM Lend l WHERE FUNCTION('DAYOFMONTH', l.returnDate) = FUNCTION('DAYOFMONTH', CURRENT_TIMESTAMP) AND l.returnStatus = false")
-    List<Lend> mFindAllByReturnDateAndReturnStatusFalse();*/
-
     // 오늘 날짜와 일치하면 자정 기준으로 반납 처리할 도서가 됨
-    @Query("SELECT l FROM Lend l WHERE l.returnDate = CURRENT_DATE AND l.returnStatus = false")
+    @Query("SELECT l FROM Lend l WHERE CAST(l.returnDate AS date) = CURRENT_DATE AND l.returnStatus = false")
     List<Lend> mFindAllByReturnDateAndReturnStatusFalse();
 
     // 반납일 도래한 도서 반납 (returnStatus = true & returnDate = 현재 시간)

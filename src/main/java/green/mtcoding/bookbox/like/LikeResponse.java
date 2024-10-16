@@ -62,4 +62,18 @@ public class LikeResponse {
         }
     }
 
+    // 즐찾 삭제
+    @Data
+    public static class DeleteDTO {
+        private Long id; // 삭제한 즐겨찾기 id
+        private Long userId;
+        private String isbn13;
+
+        public DeleteDTO(Like likePS) {
+            this.id = likePS.getId();
+            this.userId = likePS.getUser().getId();
+            this.isbn13 = likePS.getBook().getIsbn13();
+        }
+    }
+
 }

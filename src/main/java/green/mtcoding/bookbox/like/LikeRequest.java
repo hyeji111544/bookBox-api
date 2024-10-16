@@ -23,4 +23,12 @@ public class LikeRequest {
         }
     }
 
+    @Data
+    public static class DeleteDTO {
+
+        @NotEmpty
+        private String isbn13;
+
+    }
+
 }
