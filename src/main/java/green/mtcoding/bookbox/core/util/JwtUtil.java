@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import green.mtcoding.bookbox.admin.Admin;
 import green.mtcoding.bookbox.core.exception.api.ExceptionApi400;
 import green.mtcoding.bookbox.user.User;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 import java.util.Date;
@@ -50,6 +51,15 @@ public class JwtUtil {
                 .build();
     }
 
+    //TODO : 토큰 가지고 오기
+    public static String extractToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7); // 'Bearer ' 이후의 토큰 부분만 추출
+        }
+        return null;
+    }
 
 
 

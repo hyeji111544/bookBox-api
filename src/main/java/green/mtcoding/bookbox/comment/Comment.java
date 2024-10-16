@@ -29,4 +29,13 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @Builder
+    public Comment(Long id, String content, Timestamp createdAt, Book book, User user) {
+        this.id = id;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.book = book;
+        this.user = user;
+    }
 }

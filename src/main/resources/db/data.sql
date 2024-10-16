@@ -26,9 +26,6 @@ VALUES
 
 
 
-
-
-
 INSERT INTO category_tb (category_id, category_name) VALUES (112011, '소설');
 INSERT INTO category_tb (category_id, category_name) VALUES (170, '경제경영');
 INSERT INTO category_tb (category_id, category_name) VALUES (336, '자기계발');
@@ -986,3 +983,5 @@ INSERT INTO book_tb (isbn13, title, author, publisher, description, category_id,
 INSERT INTO book_tb (isbn13, title, author, publisher, description, category_id, item_id, cover, pub_date, adult, link, lend_status, reservation_status, lend_count, reservation_count)VALUES ('9771228111007', '바자 Bazaar Korea 2024.10 (표지 3종 중 랜덤) - 주요기사 : 세븐틴 정한, 더보이즈 영훈, 김우빈, 가비', 'Bazaar 편집부 (지은이)', '허스트중앙(Hearst-Joongang)', '', 2913, 347136551, 'https://image.aladin.co.kr/product/34713/65/cover200/k242933115_2.jpg', '2024-09-13', false, 'http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=347136551&amp;partner=openAPI&amp;start=api', false, false, 0, 0);
 INSERT INTO book_tb (isbn13, title, author, publisher, description, category_id, item_id, cover, pub_date, adult, link, lend_status, reservation_status, lend_count, reservation_count)VALUES ('9771739526000', '날마다 솟는 샘물 2024.10', '사랑의교회 편집부 (지은이)', '국제제자훈련원(DMI.디엠출판유통)', '', 2913, 346166961, 'https://image.aladin.co.kr/product/34616/69/cover200/k352933980_1.jpg', '2024-09-03', false, 'http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=346166961&amp;partner=openAPI&amp;start=api', false, false, 0, 0);
 INSERT INTO book_tb (isbn13, title, author, publisher, description, category_id, item_id, cover, pub_date, adult, link, lend_status, reservation_status, lend_count, reservation_count)VALUES ('9771599176001', '고교 독서평설 2024.10', '지학사 편집부 (지은이)', '지학사(잡지)', '', 2913, 347737364, 'https://image.aladin.co.kr/product/34773/73/cover200/k072933024_1.jpg', '2024-10-01', false, 'http://www.aladin.co.kr/shop/wproduct.aspx?ItemId=347737364&amp;partner=openAPI&amp;start=api', false, false, 0, 0);
+
+

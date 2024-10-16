@@ -31,7 +31,7 @@ public class BookResponse {
 
     //책만 보이는 DTO
     @Data
-    public static class BookListDTO{
+    public static class BookListDTO {
         private String isbn13;
         private String title;
         private String author;
@@ -103,48 +103,73 @@ public class BookResponse {
 
     @Data
     public static class DetailDTO {
-        //책 id
+        //책 id1
         private String isbn13;
-        //제목
+        //제목1
         private String title;
-        //저자
+        //저자1
         private String author;
-        //책 커버
+        //책 커버1
         private String cover;
-        //출판사
+        //출판사1
         private String publisher;
-        //책 요약
+        //책 요약 1
         private String description;
-        //성인
+        //성인1
         private boolean adult;
-        //출판날짜? 등록 날짜?
+        //출판날짜? 등록 날짜? 1
         private String pubDate;
-        //대여 상태
+        //대여 상태1
         private boolean lendStatus;
-        //예약 상태
+        //예약 상태1
         private boolean reservationStatus;
-        //예약 수
+        //예약 수1
         private int reservationCount;
-        //댓글
+        //카테고리 아이디1
+        private String categoryId;
+        //리뷰
         List<CommentDTO> comments = new ArrayList<>();
         //찜하기(좋아요) 아직 구현안됨
 
-
         @Data
         class CommentDTO {
+            //댓글 id 1
             private Long id;
+            //댓글 1
             private String content;
+            //댓글 생성 시간1
             private Timestamp createdAt;
+            //닉네임
             private String nick;
             private boolean isOwner;
 
-            public CommentDTO(Comment comment) {
+            public CommentDTO(Comment comment , Long currentUserId) {
                 this.id = comment.getId();
                 this.content = comment.getContent();
                 this.createdAt = comment.getCreatedAt();
                 this.nick = comment.getUser().getNick();
                 this.isOwner = false;
-                //권한 체크 해야함 이거를 어디서 해야하는가?
+                if(comment.getUser().getId() == currentUserId) {
+                    isOwner = true;
+                }
+            }
+        }
+        public DetailDTO(Book book, Long currentUserId) {
+            this.isbn13 = book.getIsbn13();
+            this.title = book.getTitle();
+            this.author = book.getAuthor();
+            this.cover = book.getCover();
+            this.publisher = book.getPublisher();
+            this.description = book.getDescription();
+            this.adult = book.isAdult();
+            this.pubDate = book.getPubDate();
+            this.lendStatus = book.isLendStatus();
+            this.reservationStatus = book.isReservationStatus();
+            this.reservationCount = book.getReservationCount();
+            this.categoryId = book.getCategory().getId();
+
+            for(Comment comment : book.getComments()) {
+                comments.add(new CommentDTO(comment, currentUserId));
             }
         }
     }
