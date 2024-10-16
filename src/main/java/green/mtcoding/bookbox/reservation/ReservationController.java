@@ -32,17 +32,14 @@ public class ReservationController {
 
     // 예약 목록 조회
     @GetMapping("/api/reservation-list")
-<<<<<<< HEAD
     public ResponseEntity<List<ReservationResponse.ReservationListDTO>> getReservationList(
-            @RequestHeader("Authorization")String token) {
-    // JWT 토큰에서 유저 ID 추출
-    String jwtToken = token.replace("Bearer ", "");
-    Long userId = JwtUtil.extractUserIdFromToken(jwtToken);
+            @RequestHeader("Authorization") String token
+         ) {
 
-=======
-    public ResponseEntity<List<ReservationResponse.ReservationListDTO>> getReservationList(@RequestParam Long userId) {
->>>>>>> 371bb72 (fix:  예약 목록 응답 수정)
-        List<ReservationResponse.ReservationListDTO> reservations = reservationService.예약목록조회(userId);
+        // JWT 토큰에서 유저 ID 추출
+        String jwtToken = token.replace("Bearer ", "");
+        Long tokenUserId = JwtUtil.extractUserIdFromToken(jwtToken);
+        List<ReservationResponse.ReservationListDTO> reservations = reservationService.예약목록조회(tokenUserId);
         return ResponseEntity.ok(reservations);
     }
 
