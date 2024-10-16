@@ -24,6 +24,18 @@ public class BookController {
         return ResponseEntity.ok(Resp.ok(bookDTO));
     }
 
+    @GetMapping("/api/main/cate-tap")
+    public ResponseEntity<?> mainCateTap() {
+        BookResponse.CateTabDTO cateDTOs = bookService.카테탭();
+        return ResponseEntity.ok(Resp.ok(cateDTOs));
+    }
+
+    @GetMapping("/api/main/uptodate-tap")
+    public ResponseEntity<?> mainUptodateTap() {
+        List<BookResponse.BookListDTO> bookListDTO= bookService.업데이트순();
+        return ResponseEntity.ok(Resp.ok(bookListDTO));
+    }
+
     //책, 카테고리 다 보이는 메인
     @GetMapping("/api/main/book-list")
     public ResponseEntity<?> mainList() {

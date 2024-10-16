@@ -9,8 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Service
@@ -18,6 +22,8 @@ import java.util.List;
 public class BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
+
+
 
     public List<BookResponse.BookSearchDTO> 검색기록보기(String keyword){
         System.out.println("검색어:" + keyword);
@@ -65,12 +71,34 @@ public class BookService {
         return dtos;
     }
 
+
     public BookResponse.DetailDTO 책상세보기(String isbn13, HttpServletRequest request){
         String token = JwtUtil.extractToken(request);
         Long userId = JwtUtil.extractUserIdFromToken(token);
         Book bookPS = bookRepository.mFindByIdWithComment(isbn13)
                 .orElseThrow(()-> new ExceptionApi404("해당 책이 없습니다"));
         return new BookResponse.DetailDTO(bookPS,userId);
+    }
+
+
+    public BookResponse.CateTabDTO 카테탭(){
+        List<Book> books = bookRepository.mFindAll();
+        List<Category> cates = categoryRepository.mFindAll();
+        return new BookResponse.CateTabDTO(cates, books);
+    }
+
+    public List<BookResponse.BookListDTO> 업데이트순(){
+        LocalDate threeMonth = LocalDate.now().minus(3, ChronoUnit.MONTHS);
+        String formattedDate = threeMonth.format(DateTimeFormatter.ISO_DATE);
+        List<Book> books = bookRepository.mFindAllPubDateDesc(formattedDate);
+        List<BookResponse.BookListDTO> dtos = new ArrayList<>();
+        int limit = Math.min(30, books.size());
+        for (int i = 0; i < limit; i++) {
+            Book book = books.get(i); // 인덱스를 사용하여 책을 가져옴
+            BookResponse.BookListDTO dto = new BookResponse.BookListDTO(book);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
 

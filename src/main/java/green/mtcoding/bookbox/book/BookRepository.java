@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,13 @@ public interface BookRepository extends JpaRepository<Book, String> {
     //메인에 보일 것
     @Query("select b from Category b left join fetch b.books c")
     List<Category> mFindAllWithCategory();
+
+    @Query("select b from Book b")
+    List<Book> mFindAll();
+
+    @Query("select b from Book b where b.pubDate >= :threeMonth order by b.pubDate desc ")
+    List<Book> mFindAllPubDateDesc(@Param("threeMonth") String threeMonth);
+
 
     //카테고리 누르면 해당 책들 나올 수 있게 만들기
     @Query("select b from Book b where b.category.id =:id")
