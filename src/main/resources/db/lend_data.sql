@@ -94,7 +94,7 @@ INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, 
 VALUES (1, '9791188331796', '2024-10-06 16:50:00.000000', false, true, '2024-10-10 11:20:00.000000');
 
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date)
-VALUES (1, '9788937461010', '2024-10-02 10:20:00.000000', false, true, '2024-10-04 17:10:00.000000');
+VALUES (1, '9791167740984', '2024-10-02 10:20:00.000000', false, true, '2024-10-04 17:10:00.000000');
 
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date)
 VALUES (1, '9791169850919', '2024-10-03 18:35:00.000000', false, true, '2024-10-05 12:00:00.000000');
@@ -115,7 +115,7 @@ INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, 
 VALUES (1, '9788927880448', '2024-10-03 08:15:00.000000', false, true, '2024-10-05 18:10:00.000000');
 
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date)
-VALUES (1, '9788937461017', '2024-10-04 19:00:00.000000', false, true, '2024-10-06 20:40:00.000000');
+VALUES (1, '9788934942467', '2024-10-04 19:00:00.000000', false, true, '2024-10-06 20:40:00.000000');
 
 INSERT INTO lend_tb (user_id, book_id, lend_date, extend_status, return_status, return_date)
 VALUES (1, '9788937460500', '2024-10-05 12:45:00.000000', false, true, '2024-10-07 14:50:00.000000');
