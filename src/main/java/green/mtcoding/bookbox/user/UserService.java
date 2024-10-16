@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -67,6 +69,15 @@ public class UserService {
         String accessToken = JwtUtil.createUserToken(user);
 
         return new UserResponse.LoginDTO(user, accessToken);
+    }
+
+
+    // 회원 목록 조회(유저의 대여 목록과 예약 목록 함께 return) TODO: 신민재
+    public List<UserResponse.UserDTO> getUserList() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(UserResponse.UserDTO::new)
+                .collect(Collectors.toList());
     }
 
 

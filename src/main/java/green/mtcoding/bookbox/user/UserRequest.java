@@ -1,5 +1,7 @@
 package green.mtcoding.bookbox.user;
 
+import green.mtcoding.bookbox.lend.LendResponse;
+import green.mtcoding.bookbox.reservation.ReservationRequest;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -10,6 +12,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class UserRequest {
@@ -42,24 +46,6 @@ public class UserRequest {
         private String username;
         @NotEmpty
         private String password;
-    }
-
-    // TODO: 유저의 기본 정보와 필요 데이터 응답을 위해 생성 - 신민재
-    @Data
-    public static class UserDTO {
-        private Long id;
-        private String username;
-        private String email;
-        private String phone;
-
-
-        // 매개변수로 받음
-        public UserDTO(User user) {
-            this.id = user.getId();
-            this.username = user.getUsername();
-            this.email = user.getEmail();
-            this.phone = user.getPhone();
-        }
     }
 
 }
