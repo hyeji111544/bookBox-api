@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query("SELECT c FROM Comment c WHERE c.book.isbn13 = :isbn13")
+    @Query("SELECT c FROM Comment c WHERE c.book.isbn13 = :isbn13 order by c.createdAt DESC")
     List<Comment> mFindCommentsByBookIsbn13(@Param("isbn13") String isbn13);
 }
