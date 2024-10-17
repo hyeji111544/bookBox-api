@@ -100,11 +100,17 @@ public class ReservationService {
     }
 
     // 예약 목록 조회 로직
-    public List<ReservationResponse.ReservationDTO> 예약목록조회(Long userId) {
+    public List<ReservationResponse.ReservationListDTO> 예약목록조회(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ExceptionApi400("유저를 찾을 수 없습니다."));
         List<Reservation> reservations = reservationRepository.findByUser(user);
         return reservations.stream()
-                .map(reservation -> new ReservationResponse.ReservationDTO(reservation))
+
+                .map(reservation -> new ReservationResponse.ReservationListDTO(
+                        reservation.getBook(),
+                        reservation.getReservationDate().toLocalDateTime(),
+                        reservation.getSequence()
+                ))
+
                 .collect(Collectors.toList());
     }
 
